@@ -89,6 +89,9 @@
     "vale_transporte": {
       "type": "boolean"
     },
+    "jornada": {
+      "type": "string"
+    },
     "finais_semana": {
       "type": "boolean"
     },

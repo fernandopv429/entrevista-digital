@@ -21,6 +21,7 @@ export const interviewDefaults = {
   tipo_dispensa: "Sem justa causa",
   ultimo_dia: "",
   vale_refeicao: true, vale_alimentacao: true, vale_transporte: true,
+  jornada: "18:30 às 07:30",
   finais_semana: true,
   ferias: true, ferias_quantidade: "Proporcional",
   folgas_trabalhadas: true, ft_quantidade: "5 a 6", ft_valor: "R$ 180 a R$ 200", ft_pagamento: "PIX", ft_comprovante: false,

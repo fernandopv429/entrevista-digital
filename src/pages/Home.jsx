@@ -43,7 +43,7 @@ export default function Home() {
       <PeriodoSection data={data} onChange={change} />
       <DispensaSection data={data} onChange={change} />
       <BeneficiosSection data={data} onChoice={choice} />
-      <JornadaSection data={data} onChoice={choice} />
+      <JornadaSection data={data} onChange={change} onChoice={choice} />
       <FeriasSection data={data} onChange={change} onChoice={choice} />
       <FolgasSection data={data} onChange={change} onChoice={choice} />
       <IntervaloSection data={data} onChange={change} onChoice={choice} />
