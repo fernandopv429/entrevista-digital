@@ -5,6 +5,7 @@ import { base44 } from "@/api/base44Client";
 import { interviewDefaults } from "@/lib/interviewDefaults";
 import IdentificationSection from "@/components/form/IdentificationSection";
 import ReclamadasSection from "@/components/form/ReclamadasSection";
+import PeriodoSection from "@/components/form/PeriodoSection";
 import DispensaSection from "@/components/form/DispensaSection";
 import BeneficiosSection from "@/components/form/BeneficiosSection";
 import JornadaSection from "@/components/form/JornadaSection";
@@ -21,7 +22,7 @@ import SaudeSection from "@/components/form/SaudeSection";
 import TestemunhaSection from "@/components/form/TestemunhaSection";
 import FactsSection from "@/components/form/FactsSection";
 
-const emptyReclamada = { razao_social: "", cnpj: "", endereco: "", cargo: "", admissao: "", demissao: "", escala: "" };
+const emptyReclamada = { razao_social: "", cnpj: "", endereco: "", cargo: "", escala: "" };
 
 export default function Home() {
   const [data, setData] = useState(interviewDefaults);
@@ -39,6 +40,7 @@ export default function Home() {
     <form onSubmit={submit} className="mx-auto mt-6 max-w-4xl space-y-5 px-4 sm:px-6">
       <IdentificationSection data={data} onChange={change} />
       <ReclamadasSection reclamadas={data.reclamadas} onChange={reclamadaChange} onAdd={addReclamada} onRemove={removeReclamada} />
+      <PeriodoSection data={data} onChange={change} />
       <DispensaSection data={data} onChange={change} />
       <BeneficiosSection data={data} onChoice={choice} />
       <JornadaSection data={data} onChoice={choice} />

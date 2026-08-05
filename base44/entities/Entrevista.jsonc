@@ -56,19 +56,19 @@
           "cargo": {
             "type": "string"
           },
-          "admissao": {
-            "type": "string",
-            "format": "date"
-          },
-          "demissao": {
-            "type": "string",
-            "format": "date"
-          },
           "escala": {
             "type": "string"
           }
         }
       }
+    },
+    "admissao": {
+      "type": "string",
+      "format": "date"
+    },
+    "demissao": {
+      "type": "string",
+      "format": "date"
     },
     "tipo_dispensa": {
       "type": "string"
