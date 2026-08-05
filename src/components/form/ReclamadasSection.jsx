@@ -16,7 +16,7 @@ export default function ReclamadasSection({ reclamadas, onChange, onAdd, onRemov
         </div>
         <div className="grid gap-5 sm:grid-cols-2">
           <div className="sm:col-span-2"><Field label="Razão social" name="razao_social" value={r.razao_social} onChange={(e) => onChange(i, "razao_social", e.target.value)} /></div>
-          <Field label="CNPJ" name="cnpj" value={r.cnpj} onChange={(e) => onChange(i, "cnpj", e.target.value)} />
+          <Field label="CNPJ" name="cnpj" value={r.cnpj} onChange={(e) => onChange(i, "cnpj", e.target.value)} format="cnpj" />
           <Field label="Cargo" name="cargo" value={r.cargo} onChange={(e) => onChange(i, "cargo", e.target.value)} />
           <div className="sm:col-span-2"><Field label="Endereço" name="endereco" value={r.endereco} onChange={(e) => onChange(i, "endereco", e.target.value)} /></div>
           <Select label="Escala e horário" name="escala" value={r.escala} options={ESCALA_OPTIONS} onChange={(e) => onChange(i, "escala", e.target.value)} />

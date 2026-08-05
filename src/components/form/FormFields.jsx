@@ -1,7 +1,11 @@
 import React from "react";
+import { applyFormat } from "@/lib/formatters";
 
-export function Field({ label, name, value, onChange, type = "text", required = false }) {
-  return <label className="block space-y-2"><span className="text-sm font-semibold text-slate-700">{label}{required && <span className="text-blue-700"> *</span>}</span><input name={name} value={value ?? ""} onChange={onChange} type={type} required={required} className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none transition focus:border-blue-700 focus:ring-4 focus:ring-blue-100" /></label>;
+export function Field({ label, name, value, onChange, type = "text", required = false, format }) {
+  const handle = format
+    ? (e) => onChange({ target: { name: e.target.name, value: applyFormat(format, e.target.value) } })
+    : onChange;
+  return <label className="block space-y-2"><span className="text-sm font-semibold text-slate-700">{label}{required && <span className="text-blue-700"> *</span>}</span><input name={name} value={value ?? ""} onChange={handle} type={type} required={required} inputMode={format ? "numeric" : undefined} className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none transition focus:border-blue-700 focus:ring-4 focus:ring-blue-100" /></label>;
 }
 
 export function TextArea({ label, name, value, onChange, rows = 4 }) {
