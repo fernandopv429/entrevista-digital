@@ -1,0 +1,184 @@
+{
+  "name": "Entrevista",
+  "type": "object",
+  "properties": {
+    "nome_cliente": {
+      "type": "string"
+    },
+    "nacionalidade": {
+      "type": "string"
+    },
+    "estado_civil": {
+      "type": "string"
+    },
+    "rg": {
+      "type": "string"
+    },
+    "cpf": {
+      "type": "string"
+    },
+    "pis": {
+      "type": "string"
+    },
+    "ctps": {
+      "type": "string"
+    },
+    "data_nascimento": {
+      "type": "string"
+    },
+    "filiacao": {
+      "type": "string"
+    },
+    "endereco_cliente": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "telefone": {
+      "type": "string"
+    },
+    "reclamada_1": {
+      "type": "string"
+    },
+    "cnpj_1": {
+      "type": "string"
+    },
+    "endereco_1": {
+      "type": "string"
+    },
+    "cargo": {
+      "type": "string"
+    },
+    "periodo_1": {
+      "type": "string"
+    },
+    "reclamada_2": {
+      "type": "string"
+    },
+    "cnpj_2": {
+      "type": "string"
+    },
+    "endereco_2": {
+      "type": "string"
+    },
+    "periodo_2": {
+      "type": "string"
+    },
+    "escala": {
+      "type": "string"
+    },
+    "tipo_dispensa": {
+      "type": "string"
+    },
+    "ultimo_dia": {
+      "type": "string"
+    },
+    "vale_refeicao": {
+      "type": "boolean"
+    },
+    "vale_alimentacao": {
+      "type": "boolean"
+    },
+    "vale_transporte": {
+      "type": "boolean"
+    },
+    "finais_semana": {
+      "type": "boolean"
+    },
+    "ferias": {
+      "type": "boolean"
+    },
+    "ferias_quantidade": {
+      "type": "string"
+    },
+    "folgas_trabalhadas": {
+      "type": "boolean"
+    },
+    "ft_quantidade": {
+      "type": "string"
+    },
+    "ft_valor": {
+      "type": "string"
+    },
+    "ft_pagamento": {
+      "type": "string"
+    },
+    "ft_comprovante": {
+      "type": "boolean"
+    },
+    "intervalo_suprimido": {
+      "type": "boolean"
+    },
+    "intervalo_detalhes": {
+      "type": "string"
+    },
+    "horas_extras": {
+      "type": "boolean"
+    },
+    "media_horas_extras": {
+      "type": "string"
+    },
+    "periodo_antecedente": {
+      "type": "string"
+    },
+    "periodo_sucedente": {
+      "type": "string"
+    },
+    "acumulo_funcao": {
+      "type": "boolean"
+    },
+    "funcoes_acumuladas": {
+      "type": "string"
+    },
+    "armamento_colete": {
+      "type": "boolean"
+    },
+    "gratificacao": {
+      "type": "boolean"
+    },
+    "gratificacao_qual": {
+      "type": "string"
+    },
+    "holerites": {
+      "type": "boolean"
+    },
+    "rescisao_contratual": {
+      "type": "boolean"
+    },
+    "espelho_ponto": {
+      "type": "boolean"
+    },
+    "desconto_indevido": {
+      "type": "boolean"
+    },
+    "desconto_qual": {
+      "type": "string"
+    },
+    "doenca_acidente": {
+      "type": "boolean"
+    },
+    "insalubridade": {
+      "type": "boolean"
+    },
+    "periculosidade": {
+      "type": "boolean"
+    },
+    "produtos": {
+      "type": "string"
+    },
+    "epi": {
+      "type": "string"
+    },
+    "testemunha": {
+      "type": "string"
+    },
+    "fatos_narrados": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "nome_cliente",
+    "cpf"
+  ]
+}

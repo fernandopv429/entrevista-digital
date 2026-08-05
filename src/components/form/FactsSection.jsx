@@ -1,0 +1,7 @@
+import React from "react";
+import SectionCard from "@/components/form/SectionCard";
+import { TextArea } from "@/components/form/FormFields";
+
+export default function FactsSection({ data, onChange }) {
+  return <SectionCard number="5" title="Fatos narrados pelo reclamante"><TextArea label="Relato completo" name="fatos_narrados" value={data.fatos_narrados} onChange={onChange} rows={13} /></SectionCard>;
+}
