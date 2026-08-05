@@ -1,0 +1,93 @@
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { FileText, Loader2, Plus, Building2, CalendarDays } from "lucide-react";
+import { base44 } from "@/api/base44Client";
+
+function formatDate(value) {
+  if (!value) return "—";
+  const d = new Date(value);
+  if (isNaN(d.getTime())) return value;
+  return d.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric" });
+}
+
+export default function Entrevistas() {
+  const [entrevistas, setEntrevistas] = useState(null);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let active = true;
+    base44.entities.Entrevista.list("-created_date", 100)
+      .then(items => { if (active) setEntrevistas(items); })
+      .catch(e => { if (active) setError(e.message); });
+    return () => { active = false; };
+  }, []);
+
+  return <main className="min-h-screen bg-slate-50 pb-20 text-slate-950">
+    <header className="border-b border-slate-200 bg-white">
+      <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 sm:py-12">
+        <div className="mb-6 flex items-center gap-3">
+          <div className="rounded-xl bg-slate-950 p-2.5 text-white"><FileText className="h-5 w-5" /></div>
+          <div>
+            <p className="font-bold tracking-[0.18em]">FERNANDO VIEIRA</p>
+            <p className="text-xs tracking-[0.35em] text-slate-500">ADVOGADOS</p>
+          </div>
+        </div>
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <p className="mb-2 text-sm font-bold uppercase tracking-widest text-blue-700">Entrevista trabalhista</p>
+            <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">Entrevistas salvas</h1>
+            <p className="mt-3 text-slate-600">Histórico de entrevistas cadastradas no sistema.</p>
+          </div>
+          <Link to="/" className="flex items-center gap-2 rounded-xl bg-slate-950 px-5 py-3 font-bold text-white transition hover:bg-slate-800"><Plus className="h-5 w-5" />Nova entrevista</Link>
+        </div>
+      </div>
+    </header>
+
+    <div className="mx-auto mt-6 max-w-4xl space-y-4 px-4 sm:px-6">
+      {entrevistas === null && !error && (
+        <div className="flex items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white p-12 text-slate-500"><Loader2 className="h-5 w-5 animate-spin" />Carregando entrevistas...</div>
+      )}
+      {error && (
+        <div className="rounded-2xl border border-rose-200 bg-rose-50 p-6 text-sm font-semibold text-rose-800">Erro ao carregar entrevistas: {error}</div>
+      )}
+      {entrevistas !== null && entrevistas.length === 0 && (
+        <div className="rounded-2xl border border-slate-200 bg-white p-12 text-center">
+          <FileText className="mx-auto mb-3 h-8 w-8 text-slate-300" />
+          <p className="font-semibold text-slate-700">Nenhuma entrevista salva ainda.</p>
+          <Link to="/" className="mt-4 inline-flex items-center gap-2 rounded-xl bg-blue-700 px-5 py-3 font-bold text-white transition hover:bg-blue-800"><Plus className="h-5 w-5" />Criar primeira entrevista</Link>
+        </div>
+      )}
+      {entrevistas !== null && entrevistas.length > 0 && entrevistas.map(item => (
+        <article key={item.id} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <h2 className="text-lg font-bold tracking-tight text-slate-950">{item.nome_cliente || "Sem nome"}</h2>
+              <p className="mt-1 text-sm text-slate-500">CPF: {item.cpf || "—"}</p>
+            </div>
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600"><CalendarDays className="h-3.5 w-3.5" />{formatDate(item.created_date)}</span>
+          </div>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+            <div className="text-sm"><span className="font-semibold text-slate-700">Nascimento: </span><span className="text-slate-600">{formatDate(item.data_nascimento)}</span></div>
+            <div className="text-sm"><span className="font-semibold text-slate-700">Dispensa: </span><span className="text-slate-600">{item.tipo_dispensa || "—"}</span></div>
+            <div className="text-sm"><span className="font-semibold text-slate-700">Último dia: </span><span className="text-slate-600">{formatDate(item.ultimo_dia)}</span></div>
+            <div className="text-sm"><span className="font-semibold text-slate-700">Telefone: </span><span className="text-slate-600">{item.telefone || "—"}</span></div>
+          </div>
+          {Array.isArray(item.reclamadas) && item.reclamadas.length > 0 && (
+            <div className="mt-4 space-y-2 border-t border-slate-100 pt-4">
+              <p className="text-xs font-bold uppercase tracking-wider text-slate-500">Reclamadas</p>
+              {item.reclamadas.map((r, i) => (
+                <div key={i} className="flex items-start gap-2 text-sm text-slate-600">
+                  <Building2 className="mt-0.5 h-4 w-4 shrink-0 text-slate-400" />
+                  <span><span className="font-semibold text-slate-700">{r.razao_social || "Sem razão social"}</span>{r.cnpj && ` · CNPJ ${r.cnpj}`}{r.cargo && ` · ${r.cargo}`}</span>
+                </div>
+              ))}
+            </div>
+          )}
+          {item.fatos_narrados && (
+            <p className="mt-4 line-clamp-3 border-t border-slate-100 pt-4 text-sm leading-relaxed text-slate-600">{item.fatos_narrados}</p>
+          )}
+        </article>
+      ))}
+    </div>
+  </main>;
+}
