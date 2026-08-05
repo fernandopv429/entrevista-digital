@@ -21,7 +21,7 @@ import SaudeSection from "@/components/form/SaudeSection";
 import TestemunhaSection from "@/components/form/TestemunhaSection";
 import FactsSection from "@/components/form/FactsSection";
 
-const emptyReclamada = { razao_social: "", cnpj: "", endereco: "", cargo: "", periodo: "", escala: "" };
+const emptyReclamada = { razao_social: "", cnpj: "", endereco: "", cargo: "", admissao: "", demissao: "", escala: "" };
 
 export default function Home() {
   const [data, setData] = useState(interviewDefaults);

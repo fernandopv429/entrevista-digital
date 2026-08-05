@@ -4,7 +4,7 @@ import SectionCard from "@/components/form/SectionCard";
 import { Field, Select } from "@/components/form/FormFields";
 import { ESCALA_OPTIONS } from "@/lib/interviewOptions";
 
-const empty = { razao_social: "", cnpj: "", endereco: "", cargo: "", periodo: "", escala: "" };
+const empty = { razao_social: "", cnpj: "", endereco: "", cargo: "", admissao: "", demissao: "", escala: "" };
 
 export default function ReclamadasSection({ reclamadas, onChange, onAdd, onRemove }) {
   return <SectionCard number="2" title="Identificação do(s) reclamado(s)"><div className="space-y-6">
@@ -19,8 +19,9 @@ export default function ReclamadasSection({ reclamadas, onChange, onAdd, onRemov
           <Field label="CNPJ" name="cnpj" value={r.cnpj} onChange={(e) => onChange(i, "cnpj", e.target.value)} />
           <Field label="Cargo" name="cargo" value={r.cargo} onChange={(e) => onChange(i, "cargo", e.target.value)} />
           <div className="sm:col-span-2"><Field label="Endereço" name="endereco" value={r.endereco} onChange={(e) => onChange(i, "endereco", e.target.value)} /></div>
-          <Field label="Período trabalhado" name="periodo" value={r.periodo} onChange={(e) => onChange(i, "periodo", e.target.value)} />
-          <Select label="Escala e horário" name="escala" value={r.escala} options={ESCALA_OPTIONS} onChange={(e) => onChange(i, "escala", e.target.value)} />
+          <Field label="Admissão" name="admissao" type="date" value={r.admissao} onChange={(e) => onChange(i, "admissao", e.target.value)} />
+          <Field label="Demissão" name="demissao" type="date" value={r.demissao} onChange={(e) => onChange(i, "demissao", e.target.value)} />
+          <div className="sm:col-span-2"><Select label="Escala e horário" name="escala" value={r.escala} options={ESCALA_OPTIONS} onChange={(e) => onChange(i, "escala", e.target.value)} /></div>
         </div>
       </div>
     ))}
