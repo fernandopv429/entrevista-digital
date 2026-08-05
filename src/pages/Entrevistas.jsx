@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { FileText, Loader2, Plus, Building2, CalendarDays } from "lucide-react";
+import { FileText, Loader2, Plus, Building2, CalendarDays, Send, CheckCircle2, AlertCircle } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
 function formatDate(value) {
@@ -13,6 +13,8 @@ function formatDate(value) {
 export default function Entrevistas() {
   const [entrevistas, setEntrevistas] = useState(null);
   const [error, setError] = useState(null);
+  const [resending, setResending] = useState({});
+  const [resendResult, setResendResult] = useState({});
 
   useEffect(() => {
     let active = true;
@@ -21,6 +23,19 @@ export default function Entrevistas() {
       .catch(e => { if (active) setError(e.message); });
     return () => { active = false; };
   }, []);
+
+  const resend = async (item) => {
+    setResending(r => ({ ...r, [item.id]: true }));
+    setResendResult(r => { const n = { ...r }; delete n[item.id]; return n; });
+    try {
+      await base44.functions.invoke("enviarWebhookEntrevista", item);
+      setResendResult(r => ({ ...r, [item.id]: { ok: true } }));
+    } catch (e) {
+      setResendResult(r => ({ ...r, [item.id]: { ok: false, msg: e.message } }));
+    } finally {
+      setResending(r => { const n = { ...r }; delete n[item.id]; return n; });
+    }
+  };
 
   return <main className="min-h-screen bg-slate-50 pb-20 text-slate-950">
     <header className="border-b border-slate-200 bg-white">
@@ -87,6 +102,14 @@ export default function Entrevistas() {
           {item.fatos_narrados && (
             <p className="mt-4 line-clamp-3 border-t border-slate-100 pt-4 text-sm leading-relaxed text-slate-600">{item.fatos_narrados}</p>
           )}
+          <div className="mt-4 flex flex-wrap items-center gap-3 border-t border-slate-100 pt-4">
+            <button type="button" onClick={() => resend(item)} disabled={!!resending[item.id]} className="inline-flex items-center gap-2 rounded-xl bg-blue-700 px-4 py-2 text-sm font-bold text-white transition hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-60">
+              {resending[item.id] ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+              {resending[item.id] ? "Enviando..." : "Reenviar evento"}
+            </button>
+            {resendResult[item.id]?.ok && <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-emerald-700"><CheckCircle2 className="h-4 w-4" />Evento reenviado</span>}
+            {resendResult[item.id] && !resendResult[item.id].ok && <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-rose-700"><AlertCircle className="h-4 w-4" />Falha: {resendResult[item.id].msg}</span>}
+          </div>
         </article>
       ))}
     </div>
