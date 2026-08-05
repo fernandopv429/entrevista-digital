@@ -63,6 +63,7 @@ export default function Entrevistas() {
             <div>
               <h2 className="text-lg font-bold tracking-tight text-slate-950">{item.nome_cliente || "Sem nome"}</h2>
               <p className="mt-1 text-sm text-slate-500">CPF: {item.cpf || "—"}</p>
+              <p className="mt-0.5 font-mono text-xs text-slate-400">ID: {item.id}</p>
             </div>
             <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600"><CalendarDays className="h-3.5 w-3.5" />{formatDate(item.created_date)}</span>
           </div>
