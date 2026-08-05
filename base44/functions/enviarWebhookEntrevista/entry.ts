@@ -11,10 +11,14 @@ export default async function(req) {
     if (!webhookUrl) return Response.json({ error: 'Webhook URL não configurado' }, { status: 500 });
 
     const entrevista = await req.json();
+    const webhookSecret = secrets.get("WEBHOOK_SECRET");
+
+    const headers = { "Content-Type": "application/json" };
+    if (webhookSecret) headers["X-Webhook-Secret"] = webhookSecret;
 
     const response = await fetch(webhookUrl, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers,
       body: JSON.stringify({
         event: "entrevista.salva",
         created_by: user.email,
