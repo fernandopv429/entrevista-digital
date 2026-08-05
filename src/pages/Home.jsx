@@ -4,8 +4,20 @@ import { base44 } from "@/api/base44Client";
 import { interviewDefaults } from "@/lib/interviewDefaults";
 import IdentificationSection from "@/components/form/IdentificationSection";
 import ReclamadasSection from "@/components/form/ReclamadasSection";
-import WorkDetailsSection from "@/components/form/WorkDetailsSection";
-import ConditionsSection from "@/components/form/ConditionsSection";
+import DispensaSection from "@/components/form/DispensaSection";
+import BeneficiosSection from "@/components/form/BeneficiosSection";
+import JornadaSection from "@/components/form/JornadaSection";
+import FeriasSection from "@/components/form/FeriasSection";
+import FolgasSection from "@/components/form/FolgasSection";
+import IntervaloSection from "@/components/form/IntervaloSection";
+import HorasExtrasSection from "@/components/form/HorasExtrasSection";
+import AcumuloSection from "@/components/form/AcumuloSection";
+import CondicoesSection from "@/components/form/CondicoesSection";
+import GratificacoesSection from "@/components/form/GratificacoesSection";
+import DocumentosSection from "@/components/form/DocumentosSection";
+import DescontosSection from "@/components/form/DescontosSection";
+import SaudeSection from "@/components/form/SaudeSection";
+import TestemunhaSection from "@/components/form/TestemunhaSection";
 import FactsSection from "@/components/form/FactsSection";
 
 const emptyReclamada = { razao_social: "", cnpj: "", endereco: "", cargo: "", periodo: "", escala: "" };
@@ -23,6 +35,25 @@ export default function Home() {
   const submit = async (event) => { event.preventDefault(); setSaving(true); await base44.entities.Entrevista.create(data); setSaving(false); setSaved(true); window.scrollTo({ top: 0, behavior: "smooth" }); };
 
   return <main className="min-h-screen bg-slate-50 pb-20 text-slate-950"><header className="border-b border-slate-200 bg-white"><div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 sm:py-12"><div className="mb-6 flex items-center gap-3"><div className="rounded-xl bg-slate-950 p-2.5 text-white"><FileText className="h-5 w-5" /></div><div><p className="font-bold tracking-[0.18em]">FERNANDO VIEIRA</p><p className="text-xs tracking-[0.35em] text-slate-500">ADVOGADOS</p></div></div><p className="mb-2 text-sm font-bold uppercase tracking-widest text-blue-700">Entrevista trabalhista</p><h1 className="max-w-2xl text-3xl font-bold tracking-tight sm:text-4xl">Formulário de atendimento ao cliente</h1><p className="mt-3 max-w-2xl text-slate-600">Revise os dados extraídos do documento e atualize qualquer informação necessária antes de salvar.</p>{saved && <div className="mt-6 flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-800"><CheckCircle2 className="h-5 w-5" />Entrevista salva com sucesso.</div>}</div></header>
-    <form onSubmit={submit} className="mx-auto mt-6 max-w-4xl space-y-5 px-4 sm:px-6"><IdentificationSection data={data} onChange={change} /><ReclamadasSection reclamadas={data.reclamadas} onChange={reclamadaChange} onAdd={addReclamada} onRemove={removeReclamada} /><WorkDetailsSection data={data} onChange={change} onChoice={choice} /><ConditionsSection data={data} onChange={change} onChoice={choice} /><FactsSection data={data} onChange={change} /><div className="sticky bottom-4 z-10 flex justify-end rounded-2xl border border-slate-200 bg-white/95 p-3 shadow-xl backdrop-blur"><button type="submit" disabled={saving} className="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-700 px-6 py-3.5 font-bold text-white transition hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto">{saving ? <Loader2 className="h-5 w-5 animate-spin" /> : <CheckCircle2 className="h-5 w-5" />}{saving ? "Salvando..." : "Salvar entrevista"}</button></div></form>
+    <form onSubmit={submit} className="mx-auto mt-6 max-w-4xl space-y-5 px-4 sm:px-6">
+      <IdentificationSection data={data} onChange={change} />
+      <ReclamadasSection reclamadas={data.reclamadas} onChange={reclamadaChange} onAdd={addReclamada} onRemove={removeReclamada} />
+      <DispensaSection data={data} onChange={change} />
+      <BeneficiosSection data={data} onChoice={choice} />
+      <JornadaSection data={data} onChoice={choice} />
+      <FeriasSection data={data} onChange={change} onChoice={choice} />
+      <FolgasSection data={data} onChange={change} onChoice={choice} />
+      <IntervaloSection data={data} onChange={change} onChoice={choice} />
+      <HorasExtrasSection data={data} onChange={change} onChoice={choice} />
+      <AcumuloSection data={data} onChange={change} onChoice={choice} />
+      <CondicoesSection data={data} onChoice={choice} />
+      <GratificacoesSection data={data} onChange={change} onChoice={choice} />
+      <DocumentosSection data={data} onChoice={choice} />
+      <DescontosSection data={data} onChange={change} onChoice={choice} />
+      <SaudeSection data={data} onChange={change} onChoice={choice} />
+      <TestemunhaSection data={data} onChange={change} />
+      <FactsSection data={data} onChange={change} />
+      <div className="sticky bottom-4 z-10 flex justify-end rounded-2xl border border-slate-200 bg-white/95 p-3 shadow-xl backdrop-blur"><button type="submit" disabled={saving} className="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-700 px-6 py-3.5 font-bold text-white transition hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto">{saving ? <Loader2 className="h-5 w-5 animate-spin" /> : <CheckCircle2 className="h-5 w-5" />}{saving ? "Salvando..." : "Salvar entrevista"}</button></div>
+    </form>
   </main>;
 }

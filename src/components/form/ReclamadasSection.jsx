@@ -7,7 +7,7 @@ import { ESCALA_OPTIONS } from "@/lib/interviewOptions";
 const empty = { razao_social: "", cnpj: "", endereco: "", cargo: "", periodo: "", escala: "" };
 
 export default function ReclamadasSection({ reclamadas, onChange, onAdd, onRemove }) {
-  return <SectionCard number="2" title="Reclamadas (empresas)"><div className="space-y-6">
+  return <SectionCard number="2" title="Identificação do(s) reclamado(s)"><div className="space-y-6">
     {reclamadas.map((r, i) => (
       <div key={i} className="rounded-xl border border-slate-200 bg-slate-50 p-5">
         <div className="mb-4 flex items-center justify-between">

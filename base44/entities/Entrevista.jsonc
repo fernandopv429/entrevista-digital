@@ -5,6 +5,12 @@
     "nome_cliente": {
       "type": "string"
     },
+    "nacionalidade": {
+      "type": "string"
+    },
+    "estado_civil": {
+      "type": "string"
+    },
     "rg": {
       "type": "string"
     },
@@ -15,6 +21,22 @@
       "type": "string"
     },
     "ctps": {
+      "type": "string"
+    },
+    "data_nascimento": {
+      "type": "string",
+      "format": "date"
+    },
+    "filiacao": {
+      "type": "string"
+    },
+    "endereco_cliente": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "telefone": {
       "type": "string"
     },
     "reclamadas": {
@@ -47,7 +69,8 @@
       "type": "string"
     },
     "ultimo_dia": {
-      "type": "string"
+      "type": "string",
+      "format": "date"
     },
     "vale_refeicao": {
       "type": "boolean"
