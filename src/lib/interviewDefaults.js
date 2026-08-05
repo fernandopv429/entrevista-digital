@@ -13,6 +13,7 @@ export const interviewDefaults = {
   telefone: "11 97419-4828 ou esposa 11 99910-8357",
   admissao: "2025-04-14",
   demissao: "2025-12-07",
+  salario: "",
   reclamadas: [
     { razao_social: "VIGSEG VIGILÂNCIA E SEGURANÇA DE VALORES LTDA", cnpj: "04.542.518/0002-99", endereco: "PRQ DOMINGOS LUIS 699, 2043081, JARDIM SÃO PAULO (ZONA NORTE), SP", cargo: "VIGILANTE", escala: "12x36" },
     { razao_social: "GLP RÉGIS (Integral Médica)", cnpj: "46.652.606/0001-02", endereco: "Rod. Régis Bittencourt, s/n, km 296,5, Itaguaciara, Itapecerica da Serra/SP, CEP 06877-115", cargo: "", escala: "12x36" }

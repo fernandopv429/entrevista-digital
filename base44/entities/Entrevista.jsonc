@@ -70,6 +70,9 @@
       "type": "string",
       "format": "date"
     },
+    "salario": {
+      "type": "string"
+    },
     "tipo_dispensa": {
       "type": "string"
     },
