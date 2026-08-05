@@ -5,12 +5,6 @@
     "nome_cliente": {
       "type": "string"
     },
-    "nacionalidade": {
-      "type": "string"
-    },
-    "estado_civil": {
-      "type": "string"
-    },
     "rg": {
       "type": "string"
     },
@@ -23,50 +17,31 @@
     "ctps": {
       "type": "string"
     },
-    "data_nascimento": {
-      "type": "string"
-    },
-    "filiacao": {
-      "type": "string"
-    },
-    "endereco_cliente": {
-      "type": "string"
-    },
-    "email": {
-      "type": "string"
-    },
-    "telefone": {
-      "type": "string"
-    },
-    "reclamada_1": {
-      "type": "string"
-    },
-    "cnpj_1": {
-      "type": "string"
-    },
-    "endereco_1": {
-      "type": "string"
-    },
-    "cargo": {
-      "type": "string"
-    },
-    "periodo_1": {
-      "type": "string"
-    },
-    "reclamada_2": {
-      "type": "string"
-    },
-    "cnpj_2": {
-      "type": "string"
-    },
-    "endereco_2": {
-      "type": "string"
-    },
-    "periodo_2": {
-      "type": "string"
-    },
-    "escala": {
-      "type": "string"
+    "reclamadas": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "razao_social": {
+            "type": "string"
+          },
+          "cnpj": {
+            "type": "string"
+          },
+          "endereco": {
+            "type": "string"
+          },
+          "cargo": {
+            "type": "string"
+          },
+          "periodo": {
+            "type": "string"
+          },
+          "escala": {
+            "type": "string"
+          }
+        }
+      }
     },
     "tipo_dispensa": {
       "type": "string"

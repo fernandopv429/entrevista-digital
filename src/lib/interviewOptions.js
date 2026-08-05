@@ -1,0 +1,5 @@
+export const ESCALA_OPTIONS = ["12x36", "5x2 (8h diárias)", "6x1 (8h diárias)", "4x2 (12h)", "Plantão 24h", "Outra"];
+export const HORAS_EXTRAS_OPTIONS = ["Não realizava", "Até 1 hora", "1 a 2 horas", "2 a 3 horas", "Mais de 3 horas"];
+export const MINUTOS_OPTIONS = ["0 minutos", "15 minutos", "30 minutos", "45 minutos", "1 hora"];
+export const FERIAS_OPTIONS = ["Não possuiu", "Proporcional", "1 período integral", "2 períodos integrais", "3 ou mais períodos"];
+export const FOLGAS_OPTIONS = ["0", "1 a 2", "3 a 4", "5 a 6", "Mais de 6"];
