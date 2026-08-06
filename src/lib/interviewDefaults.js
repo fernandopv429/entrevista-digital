@@ -28,37 +28,26 @@ export const interviewDefaults = {
 
   FUNCAO: "Vigilante",
   escala: "12x36",
-  LOCAL_PRESTACAO: "",
-  LOCAL_PRESTACAO_COMPL: "",
-
-  COMARCA_UF: "", REGIAO_TRT: "", FORO_COMPETENCIA: "",
+  JORNADA_HORARIO: "das 19h às 07h",
 
   DATA_ADMISSAO: "2025-04-14",
   DATA_RESCISAO: "2025-12-07",
-  SALARIO: "2.148,22",
 
   tipo_dispensa: "sem_justa_causa",
 
-  JORNADA_HORARIO: "18:30 às 07:30",
-  JORNADA_EXTRAPOLA: "",
-  JORNADA_FREQ_EXTRA: "",
-  tem_adic_noturno: true,
-
-  DANO_SUPERVISOR: "", DANO_FATOS: "Direitos lesados", dano_sem_estrutura: false,
-
   vale_refeicao: true, vale_alimentacao: true, vale_transporte: true,
+
+  finais_semana: true,
 
   ferias: true, ferias_quantidade: "Proporcional",
 
-  folgas_trabalhadas: true, FT_QTD_MEDIA: "5 a 7 por mês", VAL_FT: "R$ 180,00", ft_pagamento: "PIX e dinheiro", ft_comprovante: false,
-  VAL_CONDUCAO: "", VAL_ALIMENTACAO: "",
+  folgas_trabalhadas: true, FT_QTD_MEDIA: "5 a 6 por mês", VAL_FT: "R$ 180 a R$ 200", ft_pagamento: "PIX", ft_comprovante: false,
 
-  intervalo_suprimido: true, INTERVALO_GOZADO: "10 a 15 minutos",
+  intervalo_suprimido: true, INTERVALO_GOZADO: "Rádio HT sempre ligado",
 
   horas_extras: true, media_horas_extras: "Até 1 hora", periodo_antecedente: "30 minutos", periodo_sucedente: "30 minutos",
-  ADIC_CONV: "60%",
 
-  acumulo_funcao: true, funcoes_acumuladas: "Prevenção de perdas: conferência de mercadorias, validade de produtos, registros operacionais, cargas, paletes e materiais",
+  acumulo_funcao: true, funcoes_acumuladas: "Prevenção de perdas: conferência de mercadorias, controle e verificação de validade de produtos, registros operacionais, conferência de cargas, controle da quantidade de paletes, conferência de materiais e demais procedimentos relacionados ao setor de Prevenção.",
 
   armamento_colete: false,
 
@@ -68,11 +57,9 @@ export const interviewDefaults = {
 
   desconto_indevido: true, desconto_qual: "Desconto integral do saldo de empréstimo consignado na rescisão",
 
-  tem_doenca: false, tem_insalubridade: false, GRAU_INSALUBRIDADE: "", INSALUBRIDADE_FATOS: "",
-  tem_periculosidade: true, produtos: "", epi: "",
-
-  CCT_VIGENCIA: "", VALOR_CAUSA: "", LOCAL_DATA_ASSINATURA: "",
+  tem_doenca: false, tem_insalubridade: false, tem_periculosidade: true, produtos: "", epi: "",
 
   testemunha: "Irá verificar",
+
   fatos_narrados: "Após o desligamento do colaborador responsável pela função de Prevenção de Perdas, passou a acumular, além de suas atividades habituais, as atribuições inerentes à referida função, sem qualquer contraprestação salarial adicional.\n\nRealizava conferências de mercadorias, controle e verificação de validade de produtos, registros operacionais, conferência de cargas, controle da quantidade de paletes, conferência de materiais e demais procedimentos relacionados ao setor de Prevenção. A acumulação gerava significativa sobrecarga de trabalho.\n\nRealizava em média de 5 a 6 folgas trabalhadas (FTs), sendo que os respectivos valores eram pagos fora da folha. Alega que não recebia PL.\n\nHavia solicitado empréstimo consignado durante a vigência do contrato de trabalho, tendo sido surpreendido com o desconto integral do saldo devedor na rescisão contratual."
 };

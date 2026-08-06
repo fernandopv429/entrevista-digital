@@ -1,14 +1,13 @@
 import React from "react";
 import SectionCard from "@/components/form/SectionCard";
-import { Field, Select, YesNo } from "@/components/form/FormFields";
+import { Select, YesNo } from "@/components/form/FormFields";
 import { HORAS_EXTRAS_OPTIONS, MINUTOS_OPTIONS } from "@/lib/interviewOptions";
 
 export default function HorasExtrasSection({ data, onChange, onChoice }) {
-  return <SectionCard number="12" title="Horas extras"><div className="grid gap-x-6 gap-y-7 sm:grid-cols-2">
+  return <SectionCard number="10" title="Horas extras"><div className="grid gap-x-6 gap-y-7 sm:grid-cols-2">
     <YesNo label="Realizava horas extras?" name="horas_extras" value={data.horas_extras} onChange={onChoice} />
     <Select label="Média de horas extras" name="media_horas_extras" value={data.media_horas_extras} options={HORAS_EXTRAS_OPTIONS} onChange={onChange} />
     <Select label="Período antecedente à jornada" name="periodo_antecedente" value={data.periodo_antecedente} options={MINUTOS_OPTIONS} onChange={onChange} />
     <Select label="Período sucedente" name="periodo_sucedente" value={data.periodo_sucedente} options={MINUTOS_OPTIONS} onChange={onChange} />
-    <Field label="Adicional convencional de horas extras" name="ADIC_CONV" value={data.ADIC_CONV} onChange={onChange} placeholder="Ex.: 60%" />
   </div></SectionCard>;
 }

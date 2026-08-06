@@ -6,11 +6,9 @@ import { interviewDefaults } from "@/lib/interviewDefaults";
 import ModeloPeticaoSection from "@/components/form/ModeloPeticaoSection";
 import IdentificationSection from "@/components/form/IdentificationSection";
 import ReclamadasSection from "@/components/form/ReclamadasSection";
-import ForoSection from "@/components/form/ForoSection";
 import PeriodoSection from "@/components/form/PeriodoSection";
 import DispensaSection from "@/components/form/DispensaSection";
 import JornadaSection from "@/components/form/JornadaSection";
-import DanoMoralSection from "@/components/form/DanoMoralSection";
 import BeneficiosSection from "@/components/form/BeneficiosSection";
 import FeriasSection from "@/components/form/FeriasSection";
 import FolgasSection from "@/components/form/FolgasSection";
@@ -22,7 +20,6 @@ import GratificacoesSection from "@/components/form/GratificacoesSection";
 import DocumentosSection from "@/components/form/DocumentosSection";
 import DescontosSection from "@/components/form/DescontosSection";
 import SaudeSection from "@/components/form/SaudeSection";
-import ComplementaresSection from "@/components/form/ComplementaresSection";
 import TestemunhaSection from "@/components/form/TestemunhaSection";
 import FactsSection from "@/components/form/FactsSection";
 
@@ -40,11 +37,9 @@ export default function Home() {
       <ModeloPeticaoSection data={data} onChange={change} />
       <IdentificationSection data={data} onChange={change} />
       <ReclamadasSection data={data} onChange={change} />
-      <ForoSection data={data} onChange={change} />
       <PeriodoSection data={data} onChange={change} />
       <DispensaSection data={data} onChange={change} />
-      <JornadaSection data={data} onChange={change} onChoice={choice} />
-      <DanoMoralSection data={data} onChange={change} onChoice={choice} />
+      <JornadaSection data={data} onChoice={choice} />
       <BeneficiosSection data={data} onChoice={choice} />
       <FeriasSection data={data} onChange={change} onChoice={choice} />
       <FolgasSection data={data} onChange={change} onChoice={choice} />
@@ -56,7 +51,6 @@ export default function Home() {
       <DocumentosSection data={data} onChoice={choice} />
       <DescontosSection data={data} onChange={change} onChoice={choice} />
       <SaudeSection data={data} onChange={change} onChoice={choice} />
-      <ComplementaresSection data={data} onChange={change} />
       <TestemunhaSection data={data} onChange={change} />
       <FactsSection data={data} onChange={change} />
       <div className="sticky bottom-4 z-10 flex justify-end rounded-2xl border border-slate-200 bg-white/95 p-3 shadow-xl backdrop-blur"><button type="submit" disabled={saving} className="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-700 px-6 py-3.5 font-bold text-white transition hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto">{saving ? <Loader2 className="h-5 w-5 animate-spin" /> : <CheckCircle2 className="h-5 w-5" />}{saving ? "Salvando..." : "Salvar entrevista"}</button></div>
