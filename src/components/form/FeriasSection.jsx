@@ -4,7 +4,7 @@ import { Select, YesNo } from "@/components/form/FormFields";
 import { FERIAS_OPTIONS } from "@/lib/interviewOptions";
 
 export default function FeriasSection({ data, onChange, onChoice }) {
-  return <SectionCard number="8" title="Férias"><div className="grid gap-7 sm:grid-cols-2">
+  return <SectionCard number="9" title="Férias"><div className="grid gap-7 sm:grid-cols-2">
     <YesNo label="Possuiu férias?" name="ferias" value={data.ferias} onChange={onChoice} />
     <Select label="Quantidade" name="ferias_quantidade" value={data.ferias_quantidade} options={FERIAS_OPTIONS} onChange={onChange} />
   </div></SectionCard>;
