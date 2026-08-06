@@ -2,12 +2,17 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FileText, Loader2, Plus, Building2, CalendarDays, Send, CheckCircle2, AlertCircle, Tag } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import { TIPO_DISPENSA_OPTIONS } from "@/lib/interviewOptions";
 
 function formatDate(value) {
   if (!value) return "—";
   const d = new Date(value);
   if (isNaN(d.getTime())) return value;
   return d.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric" });
+}
+
+function dispensaLabel(value) {
+  return TIPO_DISPENSA_OPTIONS.find(o => o.value === value)?.label || value || "—";
 }
 
 export default function Entrevistas() {
@@ -72,12 +77,18 @@ export default function Entrevistas() {
           <Link to="/" className="mt-4 inline-flex items-center gap-2 rounded-xl bg-blue-700 px-5 py-3 font-bold text-white transition hover:bg-blue-800"><Plus className="h-5 w-5" />Criar primeira entrevista</Link>
         </div>
       )}
-      {entrevistas !== null && entrevistas.length > 0 && entrevistas.map(item => (
+      {entrevistas !== null && entrevistas.length > 0 && entrevistas.map(item => {
+        const reclamadas = [
+          { razao_social: item.RECL1_NOME, cnpj: item.RECL1_CNPJ },
+          { razao_social: item.RECL2_NOME, cnpj: item.RECL2_CNPJ },
+          { razao_social: item.RECL3_NOME, cnpj: item.RECL3_CNPJ },
+        ].filter(r => r.razao_social);
+        return (
         <article key={item.id} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div>
-              <h2 className="text-lg font-bold tracking-tight text-slate-950">{item.nome_cliente || "Sem nome"}</h2>
-              <p className="mt-1 text-sm text-slate-500">CPF: {item.cpf || "—"}</p>
+              <h2 className="text-lg font-bold tracking-tight text-slate-950">{item.RECL_NOME || "Sem nome"}</h2>
+              <p className="mt-1 text-sm text-slate-500">CPF: {item.RECL_CPF || "—"} {item.FUNCAO && `· ${item.FUNCAO}`}</p>
               <p className="mt-0.5 font-mono text-xs text-slate-400">ID: {item.id}</p>
             </div>
             <div className="flex flex-col items-end gap-1.5">
@@ -88,18 +99,18 @@ export default function Entrevistas() {
             </div>
           </div>
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
-            <div className="text-sm"><span className="font-semibold text-slate-700">Nascimento: </span><span className="text-slate-600">{formatDate(item.data_nascimento)}</span></div>
-            <div className="text-sm"><span className="font-semibold text-slate-700">Dispensa: </span><span className="text-slate-600">{item.tipo_dispensa || "—"}</span></div>
-            <div className="text-sm"><span className="font-semibold text-slate-700">Último dia: </span><span className="text-slate-600">{formatDate(item.ultimo_dia)}</span></div>
+            <div className="text-sm"><span className="font-semibold text-slate-700">Nascimento: </span><span className="text-slate-600">{formatDate(item.RECL_NASC)}</span></div>
+            <div className="text-sm"><span className="font-semibold text-slate-700">Dispensa: </span><span className="text-slate-600">{dispensaLabel(item.tipo_dispensa)}</span></div>
+            <div className="text-sm"><span className="font-semibold text-slate-700">Rescisão: </span><span className="text-slate-600">{formatDate(item.DATA_RESCISAO)}</span></div>
             <div className="text-sm"><span className="font-semibold text-slate-700">Telefone: </span><span className="text-slate-600">{item.telefone || "—"}</span></div>
           </div>
-          {Array.isArray(item.reclamadas) && item.reclamadas.length > 0 && (
+          {reclamadas.length > 0 && (
             <div className="mt-4 space-y-2 border-t border-slate-100 pt-4">
               <p className="text-xs font-bold uppercase tracking-wider text-slate-500">Reclamadas</p>
-              {item.reclamadas.map((r, i) => (
+              {reclamadas.map((r, i) => (
                 <div key={i} className="flex items-start gap-2 text-sm text-slate-600">
                   <Building2 className="mt-0.5 h-4 w-4 shrink-0 text-slate-400" />
-                  <span><span className="font-semibold text-slate-700">{r.razao_social || "Sem razão social"}</span>{r.cnpj && ` · CNPJ ${r.cnpj}`}{r.cargo && ` · ${r.cargo}`}</span>
+                  <span><span className="font-semibold text-slate-700">{r.razao_social}</span>{r.cnpj && ` · CNPJ ${r.cnpj}`}</span>
                 </div>
               ))}
             </div>
@@ -116,7 +127,8 @@ export default function Entrevistas() {
             {resendResult[item.id] && !resendResult[item.id].ok && <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-rose-700"><AlertCircle className="h-4 w-4" />Falha: {resendResult[item.id].msg}</span>}
           </div>
         </article>
-      ))}
+        );
+      })}
     </div>
   </main>;
 }
