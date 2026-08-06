@@ -2,35 +2,47 @@
   "name": "Entrevista",
   "type": "object",
   "properties": {
-    "nome_cliente": {
+    "modelo_peticao": {
       "type": "string"
     },
-    "nacionalidade": {
+    "titulo": {
       "type": "string"
     },
-    "estado_civil": {
+    "RECL_NOME": {
       "type": "string"
     },
-    "rg": {
+    "RECL_NACIONALIDADE": {
       "type": "string"
     },
-    "cpf": {
+    "RECL_ESTADOCIVIL": {
       "type": "string"
     },
-    "pis": {
+    "RECL_RG": {
       "type": "string"
     },
-    "ctps": {
+    "RECL_CPF": {
       "type": "string"
     },
-    "data_nascimento": {
+    "RECL_PIS": {
+      "type": "string"
+    },
+    "RECL_CTPS": {
+      "type": "string"
+    },
+    "RECL_SERIE": {
+      "type": "string"
+    },
+    "RECL_NASC": {
       "type": "string",
       "format": "date"
     },
-    "filiacao": {
+    "RECL_FILIACAO": {
       "type": "string"
     },
-    "endereco_cliente": {
+    "RECL_ENDERECO": {
+      "type": "string"
+    },
+    "RECL_CEP": {
       "type": "string"
     },
     "email": {
@@ -39,46 +51,97 @@
     "telefone": {
       "type": "string"
     },
-    "reclamadas": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "razao_social": {
-            "type": "string"
-          },
-          "cnpj": {
-            "type": "string"
-          },
-          "endereco": {
-            "type": "string"
-          },
-          "cargo": {
-            "type": "string"
-          },
-          "escala": {
-            "type": "string"
-          }
-        }
-      }
+    "FUNCAO": {
+      "type": "string"
     },
-    "admissao": {
+    "escala": {
+      "type": "string"
+    },
+    "LOCAL_PRESTACAO": {
+      "type": "string"
+    },
+    "LOCAL_PRESTACAO_COMPL": {
+      "type": "string"
+    },
+    "RECL1_NOME": {
+      "type": "string"
+    },
+    "RECL1_CNPJ": {
+      "type": "string"
+    },
+    "RECL1_LOGRADOURO": {
+      "type": "string"
+    },
+    "RECL1_ENDCOMPL": {
+      "type": "string"
+    },
+    "RECL2_NOME": {
+      "type": "string"
+    },
+    "RECL2_CNPJ": {
+      "type": "string"
+    },
+    "RECL2_LOGRADOURO": {
+      "type": "string"
+    },
+    "RECL2_ENDCOMPL": {
+      "type": "string"
+    },
+    "RECL3_NOME": {
+      "type": "string"
+    },
+    "RECL3_CNPJ": {
+      "type": "string"
+    },
+    "RECL3_LOGRADOURO": {
+      "type": "string"
+    },
+    "RECL3_ENDCOMPL": {
+      "type": "string"
+    },
+    "COMARCA_UF": {
+      "type": "string"
+    },
+    "REGIAO_TRT": {
+      "type": "string"
+    },
+    "FORO_COMPETENCIA": {
+      "type": "string"
+    },
+    "DATA_ADMISSAO": {
       "type": "string",
       "format": "date"
     },
-    "demissao": {
+    "DATA_RESCISAO": {
       "type": "string",
       "format": "date"
     },
-    "salario": {
+    "SALARIO": {
       "type": "string"
     },
     "tipo_dispensa": {
       "type": "string"
     },
-    "ultimo_dia": {
-      "type": "string",
-      "format": "date"
+    "JORNADA_HORARIO": {
+      "type": "string"
+    },
+    "JORNADA_EXTRAPOLA": {
+      "type": "string"
+    },
+    "JORNADA_FREQ_EXTRA": {
+      "type": "string"
+    },
+    "tem_adic_noturno": {
+      "type": "boolean"
+    },
+    "DANO_SUPERVISOR": {
+      "type": "string"
+    },
+    "DANO_FATOS": {
+      "type": "string"
+    },
+    "dano_sem_estrutura": {
+      "type": "boolean"
     },
     "vale_refeicao": {
       "type": "boolean"
@@ -87,12 +150,6 @@
       "type": "boolean"
     },
     "vale_transporte": {
-      "type": "boolean"
-    },
-    "jornada": {
-      "type": "string"
-    },
-    "finais_semana": {
       "type": "boolean"
     },
     "ferias": {
@@ -104,10 +161,10 @@
     "folgas_trabalhadas": {
       "type": "boolean"
     },
-    "ft_quantidade": {
+    "FT_QTD_MEDIA": {
       "type": "string"
     },
-    "ft_valor": {
+    "VAL_FT": {
       "type": "string"
     },
     "ft_pagamento": {
@@ -116,10 +173,16 @@
     "ft_comprovante": {
       "type": "boolean"
     },
+    "VAL_CONDUCAO": {
+      "type": "string"
+    },
+    "VAL_ALIMENTACAO": {
+      "type": "string"
+    },
     "intervalo_suprimido": {
       "type": "boolean"
     },
-    "intervalo_detalhes": {
+    "INTERVALO_GOZADO": {
       "type": "string"
     },
     "horas_extras": {
@@ -132,6 +195,9 @@
       "type": "string"
     },
     "periodo_sucedente": {
+      "type": "string"
+    },
+    "ADIC_CONV": {
       "type": "string"
     },
     "acumulo_funcao": {
@@ -164,19 +230,34 @@
     "desconto_qual": {
       "type": "string"
     },
-    "doenca_acidente": {
+    "tem_doenca": {
       "type": "boolean"
     },
-    "insalubridade": {
+    "tem_insalubridade": {
       "type": "boolean"
     },
-    "periculosidade": {
+    "GRAU_INSALUBRIDADE": {
+      "type": "string"
+    },
+    "tem_periculosidade": {
       "type": "boolean"
+    },
+    "INSALUBRIDADE_FATOS": {
+      "type": "string"
     },
     "produtos": {
       "type": "string"
     },
     "epi": {
+      "type": "string"
+    },
+    "CCT_VIGENCIA": {
+      "type": "string"
+    },
+    "VALOR_CAUSA": {
+      "type": "string"
+    },
+    "LOCAL_DATA_ASSINATURA": {
       "type": "string"
     },
     "testemunha": {
@@ -187,7 +268,7 @@
     }
   },
   "required": [
-    "nome_cliente",
-    "cpf"
+    "RECL_NOME",
+    "RECL_CPF"
   ]
 }
