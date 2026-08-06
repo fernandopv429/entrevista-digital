@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { FileText, Loader2, Plus, Building2, CalendarDays, Send, CheckCircle2, AlertCircle } from "lucide-react";
+import { FileText, Loader2, Plus, Building2, CalendarDays, Send, CheckCircle2, AlertCircle, Tag } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
 function formatDate(value) {
@@ -80,7 +80,12 @@ export default function Entrevistas() {
               <p className="mt-1 text-sm text-slate-500">CPF: {item.cpf || "—"}</p>
               <p className="mt-0.5 font-mono text-xs text-slate-400">ID: {item.id}</p>
             </div>
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600"><CalendarDays className="h-3.5 w-3.5" />{formatDate(item.created_date)}</span>
+            <div className="flex flex-col items-end gap-1.5">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600"><CalendarDays className="h-3.5 w-3.5" />{formatDate(item.created_date)}</span>
+              {item.modelo_peticao
+                ? <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-800"><Tag className="h-3.5 w-3.5" />{item.modelo_peticao}</span>
+                : <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800"><AlertCircle className="h-3.5 w-3.5" />Sem modelo</span>}
+            </div>
           </div>
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             <div className="text-sm"><span className="font-semibold text-slate-700">Nascimento: </span><span className="text-slate-600">{formatDate(item.data_nascimento)}</span></div>
