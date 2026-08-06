@@ -4,7 +4,7 @@ import { Field, Select, TextArea, YesNo } from "@/components/form/FormFields";
 import { GRAU_INSALUBRIDADE_OPTIONS } from "@/lib/interviewOptions";
 
 export default function SaudeSection({ data, onChange, onChoice }) {
-  return <SectionCard number="13" title="Saúde e segurança"><div className="grid gap-x-6 gap-y-7 sm:grid-cols-2">
+  return <SectionCard number="17" title="Saúde e segurança"><div className="grid gap-x-6 gap-y-7 sm:grid-cols-2">
     <YesNo label="Doença ou acidente de trabalho?" name="tem_doenca" value={data.tem_doenca} onChange={onChoice} />
     <YesNo label="Insalubridade?" name="tem_insalubridade" value={data.tem_insalubridade} onChange={onChoice} />
     <Select label="Grau de insalubridade" name="GRAU_INSALUBRIDADE" value={data.GRAU_INSALUBRIDADE} options={GRAU_INSALUBRIDADE_OPTIONS} onChange={onChange} />
