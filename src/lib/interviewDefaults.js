@@ -1,4 +1,5 @@
 export const interviewDefaults = {
+  modelo_peticao: "",
   nome_cliente: "MARCOS MOREIRA PAULO",
   nacionalidade: "brasileiro",
   estado_civil: "solteiro",
