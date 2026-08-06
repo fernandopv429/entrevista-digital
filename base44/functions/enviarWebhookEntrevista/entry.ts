@@ -7,14 +7,16 @@ export default async function(req) {
     const user = await base44.auth.me();
     if (!user) return Response.json({ error: 'Unauthorized' }, { status: 401 });
 
-    const webhookUrls = [secrets.get("WEBHOOK_URL"), secrets.get("WEBHOOK_URL_2")].filter(Boolean);
-    if (webhookUrls.length === 0) return Response.json({ error: 'Nenhum webhook URL configurado' }, { status: 500 });
+    const secret1 = secrets.get("WEBHOOK_SECRET");
+    const secret2 = secrets.get("WEBHOOK_SECRET_2");
+    const webhookTargets = [
+      { url: secrets.get("WEBHOOK_URL"), secret: secret1 },
+      { url: secrets.get("WEBHOOK_URL_2"), secret: secret2 || secret1 }
+    ].filter(w => w.url);
+
+    if (webhookTargets.length === 0) return Response.json({ error: 'Nenhum webhook URL configurado' }, { status: 500 });
 
     const entrevista = await req.json();
-    const webhookSecret = secrets.get("WEBHOOK_SECRET");
-
-    const headers = { "Content-Type": "application/json" };
-    if (webhookSecret) headers["X-Webhook-Secret"] = webhookSecret;
 
     const brasiliaTimestamp = new Date().toLocaleString("sv-SE", { timeZone: "America/Sao_Paulo", hour12: false }).replace(" ", "T") + "-03:00";
 
@@ -26,12 +28,14 @@ export default async function(req) {
       data: entrevista
     });
 
-    const results = await Promise.all(webhookUrls.map(async (url) => {
+    const results = await Promise.all(webhookTargets.map(async (w) => {
       try {
-        const res = await fetch(url, { method: "POST", headers, body: payload });
-        return { url, status: res.status, ok: res.ok };
+        const headers = { "Content-Type": "application/json" };
+        if (w.secret) headers["X-Webhook-Secret"] = w.secret;
+        const res = await fetch(w.url, { method: "POST", headers, body: payload });
+        return { url: w.url, status: res.status, ok: res.ok };
       } catch (err) {
-        return { url, status: 0, ok: false, error: err.message };
+        return { url: w.url, status: 0, ok: false, error: err.message };
       }
     }));
 
