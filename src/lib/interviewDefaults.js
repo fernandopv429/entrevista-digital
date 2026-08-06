@@ -35,7 +35,7 @@ export const interviewDefaults = {
 
   DATA_ADMISSAO: "2025-04-14",
   DATA_RESCISAO: "2025-12-07",
-  SALARIO: "",
+  SALARIO: "2.148,22",
 
   tipo_dispensa: "sem_justa_causa",
 
@@ -44,16 +44,16 @@ export const interviewDefaults = {
   JORNADA_FREQ_EXTRA: "",
   tem_adic_noturno: true,
 
-  DANO_SUPERVISOR: "", DANO_FATOS: "", dano_sem_estrutura: false,
+  DANO_SUPERVISOR: "", DANO_FATOS: "Direitos lesados", dano_sem_estrutura: false,
 
   vale_refeicao: true, vale_alimentacao: true, vale_transporte: true,
 
   ferias: true, ferias_quantidade: "Proporcional",
 
-  folgas_trabalhadas: true, FT_QTD_MEDIA: "5 a 6 por mês", VAL_FT: "R$ 180 a R$ 200", ft_pagamento: "PIX", ft_comprovante: false,
+  folgas_trabalhadas: true, FT_QTD_MEDIA: "5 a 7 por mês", VAL_FT: "R$ 180,00", ft_pagamento: "PIX e dinheiro", ft_comprovante: false,
   VAL_CONDUCAO: "", VAL_ALIMENTACAO: "",
 
-  intervalo_suprimido: true, INTERVALO_GOZADO: "Rádio HT sempre ligado",
+  intervalo_suprimido: true, INTERVALO_GOZADO: "10 a 15 minutos",
 
   horas_extras: true, media_horas_extras: "Até 1 hora", periodo_antecedente: "30 minutos", periodo_sucedente: "30 minutos",
   ADIC_CONV: "60%",
