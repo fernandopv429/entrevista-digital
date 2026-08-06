@@ -1,3 +1,4 @@
+export const MODELO_PETICAO_OPTIONS = ["Vigilante 12x36", "Porteiro/Controlador - SINDEEPRES", "Porteiro/Controlador - SIEMACO", "Limpeza - SIEMACO", "Genérico"];
 export const ESCALA_OPTIONS = ["12x36", "5x2 (8h diárias)", "6x1 (8h diárias)", "4x2 (12h)", "Plantão 24h", "Outra"];
 export const TIPO_DISPENSA_OPTIONS = ["Justa causa", "Sem justa causa", "Pedido de demissão", "Rescisão indireta"];
 export const HORAS_EXTRAS_OPTIONS = ["Não realizava", "Até 1 hora", "1 a 2 horas", "2 a 3 horas", "Mais de 3 horas"];
