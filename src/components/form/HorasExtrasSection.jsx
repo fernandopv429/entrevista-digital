@@ -4,7 +4,7 @@ import { Field, Select, YesNo } from "@/components/form/FormFields";
 import { HORAS_EXTRAS_OPTIONS, MINUTOS_OPTIONS } from "@/lib/interviewOptions";
 
 export default function HorasExtrasSection({ data, onChange, onChoice }) {
-  return <SectionCard number="10" title="Horas extras"><div className="grid gap-x-6 gap-y-7 sm:grid-cols-2">
+  return <SectionCard number="11" title="Horas extras"><div className="grid gap-x-6 gap-y-7 sm:grid-cols-2">
     <YesNo label="Realizava horas extras?" name="horas_extras" value={data.horas_extras} onChange={onChoice} />
     <Select label="Média de horas extras" name="media_horas_extras" value={data.media_horas_extras} options={HORAS_EXTRAS_OPTIONS} onChange={onChange} />
     <Select label="Período antecedente à jornada" name="periodo_antecedente" value={data.periodo_antecedente} options={MINUTOS_OPTIONS} onChange={onChange} />
