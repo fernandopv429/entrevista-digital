@@ -4,8 +4,12 @@ import { secrets } from 'base44:runtime';
 export default async function(req) {
   try {
     const base44 = createClientFromRequest(req);
-    const user = await base44.auth.me();
-    if (!user) return Response.json({ error: 'Unauthorized' }, { status: 401 });
+    // O formulário de entrevista é público (sem login) — boa parte das
+    // entrevistas chega anônima. Exigir usuário autenticado aqui fazia o
+    // envio falhar com 401 antes de tentar, e o Home.jsx engole esse erro
+    // silenciosamente ("webhook failure não impede o salvamento"), então o
+    // caso nunca saía daqui. auth.me() é só pra enriquecer o payload agora.
+    const user = await base44.auth.me().catch(() => null);
 
     const secret1 = secrets.get("WEBHOOK_SECRET");
     const secret2 = secrets.get("WEBHOOK_SECRET_2");
@@ -23,7 +27,7 @@ export default async function(req) {
     const payload = JSON.stringify({
       event: "entrevista.salva",
       id: entrevista.id,
-      created_by: user.email,
+      created_by: user?.email || "anonimo",
       timestamp: brasiliaTimestamp,
       data: entrevista
     });
