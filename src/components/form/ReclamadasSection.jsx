@@ -7,6 +7,18 @@ export default function ReclamadasSection({ data, onChange }) {
   const [show2, setShow2] = useState(!!data.RECL2_NOME);
   const [show3, setShow3] = useState(!!data.RECL3_NOME);
 
+  // "Remover" precisa APAGAR os campos, não só escondê-los: o payload leva o
+  // objeto inteiro, então uma 2ª reclamada oculta continuava sendo enviada e a
+  // peça saía com tomadora que o caso não tem (e com a comarca tirada do
+  // endereço dela, que o gerador prioriza sobre o da empregadora).
+  const limpar = (prefixo) => {
+    for (const campo of ['NOME', 'CNPJ', 'LOGRADOURO', 'ENDCOMPL']) {
+      onChange({ target: { name: `${prefixo}_${campo}`, value: '' } });
+    }
+  };
+  const remover2 = () => { limpar('RECL2'); limpar('RECL3'); setShow3(false); setShow2(false); };
+  const remover3 = () => { limpar('RECL3'); setShow3(false); };
+
   return <SectionCard number="2" title="Reclamadas, função e jornada"><div className="space-y-6">
     <div className="grid gap-5 sm:grid-cols-2">
       <Field label="Função exercida (cargo)" name="FUNCAO" value={data.FUNCAO} onChange={onChange} />
@@ -28,7 +40,7 @@ export default function ReclamadasSection({ data, onChange }) {
       <div className="rounded-xl border border-slate-200 bg-slate-50 p-5">
         <div className="mb-4 flex items-center justify-between">
           <span className="text-xs font-bold uppercase tracking-widest text-blue-700">2ª Reclamada (tomadora)</span>
-          <button type="button" onClick={() => setShow2(false)} className="text-sm font-medium text-red-600 hover:underline">Remover</button>
+          <button type="button" onClick={remover2} className="text-sm font-medium text-red-600 hover:underline">Remover</button>
         </div>
         <div className="grid gap-5 sm:grid-cols-2">
           <div className="sm:col-span-2"><Field label="Razão social" name="RECL2_NOME" value={data.RECL2_NOME} onChange={onChange} /></div>
@@ -46,7 +58,7 @@ export default function ReclamadasSection({ data, onChange }) {
       <div className="rounded-xl border border-slate-200 bg-slate-50 p-5">
         <div className="mb-4 flex items-center justify-between">
           <span className="text-xs font-bold uppercase tracking-widest text-blue-700">3ª Reclamada (tomadora)</span>
-          <button type="button" onClick={() => setShow3(false)} className="text-sm font-medium text-red-600 hover:underline">Remover</button>
+          <button type="button" onClick={remover3} className="text-sm font-medium text-red-600 hover:underline">Remover</button>
         </div>
         <div className="grid gap-5 sm:grid-cols-2">
           <div className="sm:col-span-2"><Field label="Razão social" name="RECL3_NOME" value={data.RECL3_NOME} onChange={onChange} /></div>
