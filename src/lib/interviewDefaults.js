@@ -45,8 +45,9 @@ export const interviewDefaults = {
   tipo_dispensa: "",
 
   vale_refeicao: undefined, vale_alimentacao: undefined, vale_transporte: undefined,
+  VALOR_AUX_ALIMENTACAO: "", VAL_CONDUCAO: "",
 
-  finais_semana: undefined,
+  finais_semana: undefined, tem_adic_noturno: undefined,
 
   ferias: undefined, ferias_quantidade: "",
 
@@ -61,6 +62,8 @@ export const interviewDefaults = {
   armamento_colete: undefined,
 
   gratificacao: undefined, gratificacao_qual: "",
+
+  assiduidade: undefined, assiduidade_prometido: "", assiduidade_pago: "",
 
   holerites: undefined, rescisao_contratual: undefined, espelho_ponto: undefined,
 
@@ -112,7 +115,8 @@ export const interviewExample = {
   tipo_dispensa: "sem_justa_causa",
 
   vale_refeicao: true, vale_alimentacao: true, vale_transporte: true,
-  finais_semana: true,
+  VALOR_AUX_ALIMENTACAO: "R$ 23,30", VAL_CONDUCAO: "R$ 10,00",
+  finais_semana: true, tem_adic_noturno: true,
   ferias: true, ferias_quantidade: "Proporcional",
   folgas_trabalhadas: true, FT_QTD_MEDIA: "5 a 6", VAL_FT: "R$ 180,00", ft_pagamento: "PIX", ft_comprovante: false,
   intervalo_suprimido: true, INTERVALO_GOZADO: "15 minutos",
@@ -120,6 +124,7 @@ export const interviewExample = {
   acumulo_funcao: false, funcoes_acumuladas: "",
   armamento_colete: false,
   gratificacao: false, gratificacao_qual: "",
+  assiduidade: true, assiduidade_prometido: "R$ 300,00", assiduidade_pago: "R$ 100,00",
   holerites: true, rescisao_contratual: false, espelho_ponto: false,
   desconto_indevido: false, desconto_qual: "",
   tem_doenca: false, tem_insalubridade: false, tem_periculosidade: true, produtos: "", epi: "",
