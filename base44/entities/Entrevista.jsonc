@@ -120,6 +120,30 @@
     "vale_transporte": {
       "type": "boolean"
     },
+    "VALOR_AUX_ALIMENTACAO": {
+      "type": "string",
+      "description": "Valor di\u00e1rio do aux\u00edlio-alimenta\u00e7\u00e3o em reais (ex: R$ 23,30). Sem ele o gerador usa o padr\u00e3o da CCT e, quando a conven\u00e7\u00e3o n\u00e3o traz o n\u00famero, a pe\u00e7a sa\u00eda com [A PREENCHER]."
+    },
+    "VAL_CONDUCAO": {
+      "type": "string",
+      "description": "Valor di\u00e1rio da condu\u00e7\u00e3o / vale-transporte em reais (ex: R$ 10,00)."
+    },
+    "tem_adic_noturno": {
+      "type": "boolean",
+      "description": "Trabalhava no intervalo das 22h \u00e0s 5h (adicional noturno, art. 73 da CLT)."
+    },
+    "assiduidade": {
+      "type": "boolean",
+      "description": "Havia pr\u00eamio/bonifica\u00e7\u00e3o de assiduidade prometido."
+    },
+    "assiduidade_prometido": {
+      "type": "string",
+      "description": "Valor mensal prometido a t\u00edtulo de pr\u00eamio de assiduidade (ex: R$ 300,00)."
+    },
+    "assiduidade_pago": {
+      "type": "string",
+      "description": "Valor mensal efetivamente pago. A verba pedida \u00e9 a DIFEREN\u00c7A entre o prometido e o pago (art. 457, \u00a71\u00ba, CLT)."
+    },
     "finais_semana": {
       "type": "boolean"
     },
