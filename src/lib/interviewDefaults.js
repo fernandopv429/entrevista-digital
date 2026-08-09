@@ -1,65 +1,129 @@
+// Estado inicial do formulário. Começa VAZIO de propósito.
+//
+// Antes daqui saíam os dados reais de um cliente (nome, CPF, RG, PIS, CTPS,
+// filiação, endereço, telefones) e de duas empresas. Como o formulário é
+// público e este arquivo vai para o navegador, esses dados ficavam expostos;
+// pior, quem não apagasse os campos herdados mandava a 2ª reclamada daquele
+// caso para a peça de outro cliente — e o gerador tira o local de prestação
+// (e daí a comarca) justamente do endereço da 2ª reclamada.
+//
+// Campos de texto ficam como string vazia porque os inputs são controlados.
+// Os booleanos ficam SEM valor: "não respondido" não é a mesma coisa que
+// "Não", e um "Não" presumido derruba a tese silenciosamente.
+
 export const interviewDefaults = {
   modelo_peticao: "",
   titulo: "",
-  RECL_NOME: "MARCOS MOREIRA PAULO",
+
+  RECL_NOME: "",
+  RECL_NACIONALIDADE: "brasileiro",
+  RECL_ESTADOCIVIL: "",
+  RECL_RG: "",
+  RECL_CPF: "",
+  RECL_PIS: "",
+  RECL_CTPS: "",
+  RECL_SERIE: "",
+  RECL_NASC: "",
+  RECL_FILIACAO: "",
+  RECL_ENDERECO: "",
+  RECL_CEP: "",
+  email: "",
+  telefone: "",
+
+  RECL1_NOME: "", RECL1_CNPJ: "", RECL1_LOGRADOURO: "", RECL1_ENDCOMPL: "",
+  RECL2_NOME: "", RECL2_CNPJ: "", RECL2_LOGRADOURO: "", RECL2_ENDCOMPL: "",
+  RECL3_NOME: "", RECL3_CNPJ: "", RECL3_LOGRADOURO: "", RECL3_ENDCOMPL: "",
+
+  FUNCAO: "",
+  escala: "",
+  JORNADA_HORARIO: "",
+
+  DATA_ADMISSAO: "",
+  DATA_RESCISAO: "",
+  SALARIO: "",
+
+  tipo_dispensa: "",
+
+  vale_refeicao: undefined, vale_alimentacao: undefined, vale_transporte: undefined,
+
+  finais_semana: undefined,
+
+  ferias: undefined, ferias_quantidade: "",
+
+  folgas_trabalhadas: undefined, FT_QTD_MEDIA: "", VAL_FT: "", ft_pagamento: "", ft_comprovante: undefined,
+
+  intervalo_suprimido: undefined, INTERVALO_GOZADO: "",
+
+  horas_extras: undefined, media_horas_extras: "", periodo_antecedente: "", periodo_sucedente: "",
+
+  acumulo_funcao: undefined, funcoes_acumuladas: "",
+
+  armamento_colete: undefined,
+
+  gratificacao: undefined, gratificacao_qual: "",
+
+  holerites: undefined, rescisao_contratual: undefined, espelho_ponto: undefined,
+
+  desconto_indevido: undefined, desconto_qual: "",
+
+  tem_doenca: undefined, tem_insalubridade: undefined, tem_periculosidade: undefined, produtos: "", epi: "",
+
+  testemunha: "",
+
+  fatos_narrados: "",
+};
+
+// Exemplo FICTÍCIO para testar o fluxo ponta a ponta sem usar dados de cliente.
+// Carregado só pelo botão "Carregar exemplo" — nunca é o estado inicial.
+// Os CNPJs abaixo são inválidos de propósito (não passam no dígito verificador).
+export const interviewExample = {
+  ...interviewDefaults,
+  modelo_peticao: "",
+  titulo: "EXEMPLO — não protocolar",
+
+  RECL_NOME: "JOÃO EXEMPLO DA SILVA",
   RECL_NACIONALIDADE: "brasileiro",
   RECL_ESTADOCIVIL: "solteiro",
-  RECL_RG: "672853966 São Paulo/SP",
-  RECL_CPF: "105.678.257-95",
-  RECL_PIS: "1290165260-5",
-  RECL_CTPS: "105678",
-  RECL_SERIE: "25795",
-  RECL_NASC: "1983-07-08",
-  RECL_FILIACAO: "José Paulo Irmão e Damiana Moreira Paulo",
-  RECL_ENDERECO: "Rua Antonio de Albuquerque, nº 181, cs 03, Aldeinha, Itapecerica da Serra/SP",
-  RECL_CEP: "06877-150",
-  email: "marcos81769111@gmail.com",
-  telefone: "11 97419-4828 ou esposa 11 99910-8357",
+  RECL_RG: "00.000.000-0",
+  RECL_CPF: "000.000.000-00",
+  RECL_PIS: "000.00000.00-0",
+  RECL_CTPS: "000000",
+  RECL_SERIE: "0000",
+  RECL_NASC: "1990-01-01",
+  RECL_FILIACAO: "Pai Exemplo e Mãe Exemplo",
+  RECL_ENDERECO: "Rua Exemplo, nº 100, Centro, São Paulo/SP",
+  RECL_CEP: "01000-000",
+  email: "exemplo@exemplo.com",
+  telefone: "(11) 90000-0000",
 
-  RECL1_NOME: "VIGSEG VIGILÂNCIA E SEGURANÇA DE VALORES LTDA",
-  RECL1_CNPJ: "04.542.518/0002-99",
-  RECL1_LOGRADOURO: "PRQ DOMINGOS LUIS 699, 2043081, JARDIM SÃO PAULO (ZONA NORTE)",
-  RECL1_ENDCOMPL: "São Paulo/SP",
-  RECL2_NOME: "GLP RÉGIS (Integral Médica)",
-  RECL2_CNPJ: "46.652.606/0001-02",
-  RECL2_LOGRADOURO: "Rod. Régis Bittencourt, s/n, km 296,5, Itaguaciara",
-  RECL2_ENDCOMPL: "Itapecerica da Serra/SP, CEP 06877-115",
-  RECL3_NOME: "", RECL3_CNPJ: "", RECL3_LOGRADOURO: "", RECL3_ENDCOMPL: "",
+  RECL1_NOME: "EMPRESA EXEMPLO SEGURANÇA LTDA",
+  RECL1_CNPJ: "00.000.000/0001-00",
+  RECL1_LOGRADOURO: "Av. Exemplo, 1000, Centro",
+  RECL1_ENDCOMPL: "São Paulo/SP, CEP 01000-000",
 
   FUNCAO: "Vigilante",
   escala: "12x36",
   JORNADA_HORARIO: "das 19h às 07h",
 
-  DATA_ADMISSAO: "2025-04-14",
-  DATA_RESCISAO: "2025-12-07",
+  DATA_ADMISSAO: "2023-01-02",
+  DATA_RESCISAO: "2025-06-30",
+  SALARIO: "R$ 2.148,22",
 
   tipo_dispensa: "sem_justa_causa",
 
   vale_refeicao: true, vale_alimentacao: true, vale_transporte: true,
-
   finais_semana: true,
-
   ferias: true, ferias_quantidade: "Proporcional",
-
-  folgas_trabalhadas: true, FT_QTD_MEDIA: "5 a 6 por mês", VAL_FT: "R$ 180 a R$ 200", ft_pagamento: "PIX", ft_comprovante: false,
-
-  intervalo_suprimido: true, INTERVALO_GOZADO: "Rádio HT sempre ligado",
-
+  folgas_trabalhadas: true, FT_QTD_MEDIA: "5 a 6", VAL_FT: "R$ 180,00", ft_pagamento: "PIX", ft_comprovante: false,
+  intervalo_suprimido: true, INTERVALO_GOZADO: "15 minutos",
   horas_extras: true, media_horas_extras: "Até 1 hora", periodo_antecedente: "30 minutos", periodo_sucedente: "30 minutos",
-
-  acumulo_funcao: true, funcoes_acumuladas: "Prevenção de perdas: conferência de mercadorias, controle e verificação de validade de produtos, registros operacionais, conferência de cargas, controle da quantidade de paletes, conferência de materiais e demais procedimentos relacionados ao setor de Prevenção.",
-
+  acumulo_funcao: false, funcoes_acumuladas: "",
   armamento_colete: false,
-
   gratificacao: false, gratificacao_qual: "",
-
   holerites: true, rescisao_contratual: false, espelho_ponto: false,
-
-  desconto_indevido: true, desconto_qual: "Desconto integral do saldo de empréstimo consignado na rescisão",
-
+  desconto_indevido: false, desconto_qual: "",
   tem_doenca: false, tem_insalubridade: false, tem_periculosidade: true, produtos: "", epi: "",
-
   testemunha: "Irá verificar",
 
-  fatos_narrados: "Após o desligamento do colaborador responsável pela função de Prevenção de Perdas, passou a acumular, além de suas atividades habituais, as atribuições inerentes à referida função, sem qualquer contraprestação salarial adicional.\n\nRealizava conferências de mercadorias, controle e verificação de validade de produtos, registros operacionais, conferência de cargas, controle da quantidade de paletes, conferência de materiais e demais procedimentos relacionados ao setor de Prevenção. A acumulação gerava significativa sobrecarga de trabalho.\n\nRealizava em média de 5 a 6 folgas trabalhadas (FTs), sendo que os respectivos valores eram pagos fora da folha. Alega que não recebia PL.\n\nHavia solicitado empréstimo consignado durante a vigência do contrato de trabalho, tendo sido surpreendido com o desconto integral do saldo devedor na rescisão contratual."
+  fatos_narrados: "Caso fictício usado apenas para testar a geração da minuta.",
 };
