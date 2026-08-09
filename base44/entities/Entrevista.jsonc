@@ -104,6 +104,10 @@
       "type": "string",
       "format": "date"
     },
+    "SALARIO": {
+      "type": "string",
+      "description": "Sal\u00e1rio-base mensal, como texto em reais (ex: R$ 2.148,22). O gerador l\u00ea este campo em mapearWebhook (pick 'SALARIO'/'salario') e dele derivam aviso, 13\u00ba, f\u00e9rias, FGTS, multas 467/477, hora normal e dano moral. Sem ele a pe\u00e7a sai calculada sobre o piso presumido da CCT."
+    },
     "tipo_dispensa": {
       "type": "string"
     },
