@@ -1,13 +1,28 @@
 import React from "react";
 import SectionCard from "@/components/form/SectionCard";
-import { Field, YesNo } from "@/components/form/FormFields";
+import { Field, Select, YesNo } from "@/components/form/FormFields";
+import { FOLGAS_OPTIONS_ATIVO, FT_PAGAMENTO_OPTIONS } from "@/lib/interviewOptions";
 
+// Os campos secundarios so aparecem (e passam a ser obrigatorios) quando a
+// resposta e "Sim". Sem quantidade e sem valor, o gerador nao consegue liquidar
+// as folgas e o item simplesmente NAO entra no rol de pedidos, em silencio.
 export default function FolgasSection({ data, onChange, onChoice }) {
-  return <SectionCard number="8" title="Folgas trabalhadas (FT)"><div className="grid gap-x-6 gap-y-7 sm:grid-cols-2">
+  const trabalhou = data.folgas_trabalhadas === true;
+  return <SectionCard number="8" title="Folgas trabalhadas (FT)"><div className="space-y-6">
     <YesNo label="Trabalhou folgas?" name="folgas_trabalhadas" value={data.folgas_trabalhadas} onChange={onChoice} />
-    <Field label="Quantidade média por mês" name="FT_QTD_MEDIA" value={data.FT_QTD_MEDIA} onChange={onChange} placeholder="Ex.: 5 a 6" />
-    <Field label="Valor recebido por FT" name="VAL_FT" value={data.VAL_FT} onChange={onChange} placeholder="Ex.: R$ 180,00" />
-    <Field label="Forma de recebimento" name="ft_pagamento" value={data.ft_pagamento} onChange={onChange} />
-    <YesNo label="Possui comprovante de pagamento?" name="ft_comprovante" value={data.ft_comprovante} onChange={onChoice} />
+    {trabalhou && <>
+      <div className="grid gap-x-6 gap-y-7 sm:grid-cols-2">
+        <Select label="Média de folgas por mês" name="FT_QTD_MEDIA" value={data.FT_QTD_MEDIA} options={FOLGAS_OPTIONS_ATIVO} onChange={onChange} required />
+        <Field label="Valor recebido por FT / diária" name="VAL_FT" value={data.VAL_FT} onChange={onChange} format="currency" required />
+        <Select label="Forma de recebimento" name="ft_pagamento" value={data.ft_pagamento} options={FT_PAGAMENTO_OPTIONS} onChange={onChange} required />
+        <YesNo label="Possui comprovante de pagamento?" name="ft_comprovante" value={data.ft_comprovante} onChange={onChoice} />
+      </div>
+      <p className="text-sm text-slate-600">
+        Quantidade e valor são o que permite liquidar as folgas no rol de pedidos. A forma de
+        recebimento importa por si: Pix ou dinheiro caracterizam pagamento por fora e acionam o
+        pedido de integração ao salário, com reflexos em DSR, aviso prévio, 13º, férias + 1/3 e
+        FGTS + 40%.
+      </p>
+    </>}
   </div></SectionCard>;
 }
