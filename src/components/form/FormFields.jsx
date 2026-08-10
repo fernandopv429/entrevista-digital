@@ -1,7 +1,7 @@
 import React from "react";
 import { applyFormat } from "@/lib/formatters";
 
-// `placeholder` era passado por seis campos do formulário e caiía no vazio: o
+// `placeholder` era passado por seis campos do formulário e caía no vazio: o
 // componente não recebia a prop, então nenhum daqueles exemplos ("Ex.: das 19h
 // às 07h", "Ex.: São Paulo/SP") jamais chegou à tela.
 export function Field({ label, name, value, onChange, type = "text", required = false, format, placeholder }) {
