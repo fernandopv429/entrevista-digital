@@ -12,8 +12,8 @@ export default function BeneficiosSection({ data, onChange, onChoice }) {
     </div>
     {(temAlimentacao || data.vale_transporte) && (
       <div className="grid gap-5 sm:grid-cols-2">
-        {temAlimentacao && <Field label="Valor diário do auxílio-alimentação" name="VALOR_AUX_ALIMENTACAO" value={data.VALOR_AUX_ALIMENTACAO} onChange={onChange} format="currency" />}
-        {data.vale_transporte && <Field label="Valor diário da condução" name="VAL_CONDUCAO" value={data.VAL_CONDUCAO} onChange={onChange} format="currency" />}
+        {temAlimentacao && <Field label="Valor diário do auxílio-alimentação" name="VALOR_AUX_ALIMENTACAO" value={data.VALOR_AUX_ALIMENTACAO} onChange={onChange} format="currency" required />}
+        {data.vale_transporte && <Field label="Valor diário da condução" name="VAL_CONDUCAO" value={data.VAL_CONDUCAO} onChange={onChange} format="currency" required />}
       </div>
     )}
     <p className="text-sm text-slate-600">
