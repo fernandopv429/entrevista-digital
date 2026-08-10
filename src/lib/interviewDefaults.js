@@ -118,7 +118,9 @@ export const interviewExample = {
   VALOR_AUX_ALIMENTACAO: "R$ 23,30", VAL_CONDUCAO: "R$ 10,00",
   finais_semana: true, tem_adic_noturno: true,
   ferias: true, ferias_quantidade: "Proporcional",
-  folgas_trabalhadas: true, FT_QTD_MEDIA: "5 a 6", VAL_FT: "R$ 180,00", ft_pagamento: "PIX", ft_comprovante: false,
+  // FT_QTD_MEDIA e ft_pagamento agora sao <select>: os valores precisam bater
+  // exatamente com FOLGAS_OPTIONS_ATIVO e FT_PAGAMENTO_OPTIONS.
+  folgas_trabalhadas: true, FT_QTD_MEDIA: "5 a 6", VAL_FT: "R$ 180,00", ft_pagamento: "Pix", ft_comprovante: false,
   intervalo_suprimido: true, INTERVALO_GOZADO: "15 minutos",
   horas_extras: true, media_horas_extras: "Até 1 hora", periodo_antecedente: "30 minutos", periodo_sucedente: "30 minutos",
   acumulo_funcao: false, funcoes_acumuladas: "",
