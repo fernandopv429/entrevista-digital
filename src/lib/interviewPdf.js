@@ -170,7 +170,28 @@ const SECTIONS = [
   },
 ];
 
-export function generateInterviewPdf(data) {
+const LOGO_URL =
+  "https://media.base44.com/images/public/6a734d6c72c1f853994b8733/3d1eb3c60_image.png";
+
+let logoCache = null;
+async function loadLogo() {
+  if (logoCache) return logoCache;
+  try {
+    const res = await fetch(LOGO_URL);
+    const blob = await res.blob();
+    logoCache = await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  } catch (e) {
+    logoCache = null;
+  }
+  return logoCache;
+}
+
+export async function generateInterviewPdf(data) {
   const doc = new jsPDF({ unit: "pt", format: "a4" });
   const pageW = doc.internal.pageSize.getWidth();
   const pageH = doc.internal.pageSize.getHeight();
@@ -185,17 +206,25 @@ export function generateInterviewPdf(data) {
     }
   };
 
-  // Cabeçalho
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(16);
-  doc.setTextColor(15, 23, 42);
-  doc.text("FERNANDO VIEIRA ADVOGADOS", marginX, y);
-  y += 18;
+  // Cabeçalho com a logo do escritório
+  const logo = await loadLogo();
+  if (logo) {
+    const logoW = 230;
+    const logoH = 52;
+    doc.addImage(logo, "PNG", marginX, y, logoW, logoH);
+    y += logoH + 14;
+  } else {
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(16);
+    doc.setTextColor(15, 23, 42);
+    doc.text("FERNANDO VIEIRA ADVOGADOS", marginX, y);
+    y += 22;
+  }
   doc.setFont("helvetica", "normal");
   doc.setFontSize(11);
   doc.setTextColor(100, 116, 139);
   doc.text("Entrevista trabalhista — Formulário de atendimento", marginX, y);
-  y += 22;
+  y += 14;
   doc.setDrawColor(226, 232, 240);
   doc.line(marginX, y, pageW - marginX, y);
   y += 18;
