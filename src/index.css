@@ -29,6 +29,10 @@
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
+    --app-bg: 33 14% 97%;
+    --ink: 245 14% 14%;
+    --brand: 14 100% 56%;
+    --brand-ink: 18 50% 64%;
     --font-heading: ui-sans-serif, system-ui, sans-serif;
     --font-body: ui-sans-serif, system-ui, sans-serif;
     --font-display: ui-sans-serif, system-ui, sans-serif;
@@ -76,6 +80,10 @@
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+    --app-bg: 33 14% 97%;
+    --ink: 245 14% 14%;
+    --brand: 14 100% 56%;
+    --brand-ink: 18 50% 64%;
   }
 }
 

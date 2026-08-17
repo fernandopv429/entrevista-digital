@@ -43,7 +43,7 @@ export default function Entrevistas() {
     }
   };
 
-  return <main className="min-h-screen bg-slate-50 pb-20 text-slate-950">
+  return <main className="min-h-screen pb-20 text-slate-950">
     <header className="border-b border-slate-200 bg-white">
       <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 sm:py-12">
         <div className="mb-6 flex items-center gap-3">
