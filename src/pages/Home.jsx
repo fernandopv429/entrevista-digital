@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { CheckCircle2, FileText, Loader2, ListChecks, FlaskConical } from "lucide-react";
+import { CheckCircle2, FileText, Loader2, ListChecks, FlaskConical, Download } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { interviewDefaults, interviewExample } from "@/lib/interviewDefaults";
+import { generateInterviewPdf } from "@/lib/interviewPdf";
 import AvisoEstimativa from "@/components/form/AvisoEstimativa";
 import ModeloPeticaoSection from "@/components/form/ModeloPeticaoSection";
 import IdentificationSection from "@/components/form/IdentificationSection";
@@ -80,7 +81,7 @@ export default function Home() {
       <SaudeSection data={data} onChange={change} onChoice={choice} />
       <TestemunhaSection data={data} onChange={change} />
       <FactsSection data={data} onChange={change} />
-      <div className="sticky bottom-4 z-10 flex justify-end rounded-2xl border border-slate-200 bg-white/95 p-3 shadow-xl backdrop-blur"><button type="submit" disabled={saving} className="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-700 px-6 py-3.5 font-bold text-white transition hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto">{saving ? <Loader2 className="h-5 w-5 animate-spin" /> : <CheckCircle2 className="h-5 w-5" />}{saving ? "Salvando..." : "Salvar entrevista"}</button></div>
+      <div className="sticky bottom-4 z-10 flex flex-wrap justify-end gap-3 rounded-2xl border border-slate-200 bg-white/95 p-3 shadow-xl backdrop-blur"><button type="button" onClick={() => generateInterviewPdf(data)} className="flex w-full items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-6 py-3.5 font-bold text-slate-700 transition hover:bg-slate-50 sm:w-auto"><Download className="h-5 w-5" />Baixar PDF</button><button type="submit" disabled={saving} className="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-700 px-6 py-3.5 font-bold text-white transition hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto">{saving ? <Loader2 className="h-5 w-5 animate-spin" /> : <CheckCircle2 className="h-5 w-5" />}{saving ? "Salvando..." : "Salvar entrevista"}</button></div>
     </form>
   </main>;
 }
