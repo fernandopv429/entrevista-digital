@@ -169,7 +169,7 @@ const SECTIONS = [
 ];
 
 const LOGO_URL =
-  "https://media.base44.com/images/public/6a734d6c72c1f853994b8733/7ed4f9f93_logo_fernando_vieira_laranja1.png";
+  "https://media.base44.com/images/public/6a734d6c72c1f853994b8733/0dbb0b8f0_image.png";
 
 let logoCache = null;
 // Retorna { dataUrl, width, height } preservando a proporção real da imagem,
