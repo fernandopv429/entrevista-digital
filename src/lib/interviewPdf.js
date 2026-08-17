@@ -169,7 +169,7 @@ const SECTIONS = [
 ];
 
 const LOGO_URL =
-  "https://media.base44.com/images/public/6a734d6c72c1f853994b8733/3d1eb3c60_image.png";
+  "https://media.base44.com/images/public/6a734d6c72c1f853994b8733/2b37b8453_logo_fernando_vieira_laranja.png";
 
 let logoCache = null;
 async function loadLogo() {
