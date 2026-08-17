@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { FileText, Loader2, Plus, Building2, CalendarDays, Send, CheckCircle2, AlertCircle, Tag } from "lucide-react";
+import { FileText, Loader2, Plus, Building2, CalendarDays, Send, CheckCircle2, AlertCircle, Tag, Download } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { TIPO_DISPENSA_OPTIONS } from "@/lib/interviewOptions";
+import { generateInterviewPdf } from "@/lib/interviewPdf";
 
 function formatDate(value) {
   if (!value) return "—";
@@ -119,6 +120,7 @@ export default function Entrevistas() {
             <p className="mt-4 line-clamp-3 border-t border-slate-100 pt-4 text-sm leading-relaxed text-slate-600">{item.fatos_narrados}</p>
           )}
           <div className="mt-4 flex flex-wrap items-center gap-3 border-t border-slate-100 pt-4">
+            <button type="button" onClick={() => generateInterviewPdf(item)} className="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-bold text-slate-700 transition hover:bg-slate-50"><Download className="h-4 w-4" />Baixar PDF</button>
             <button type="button" onClick={() => resend(item)} disabled={!!resending[item.id]} className="inline-flex items-center gap-2 rounded-xl bg-blue-700 px-4 py-2 text-sm font-bold text-white transition hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-60">
               {resending[item.id] ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
               {resending[item.id] ? "Enviando..." : "Reenviar evento"}
