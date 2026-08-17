@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { FileText, Loader2, Plus, Building2, CalendarDays, Send, CheckCircle2, AlertCircle, Tag, Download } from "lucide-react";
+import { FileText, Loader2, Building2, CalendarDays, Send, CheckCircle2, AlertCircle, Tag, Download } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { TIPO_DISPENSA_OPTIONS } from "@/lib/interviewOptions";
 import { generateInterviewPdf } from "@/lib/interviewPdf";
@@ -45,22 +44,9 @@ export default function Entrevistas() {
 
   return <main className="min-h-screen pb-20 text-slate-950">
     <header className="border-b border-slate-200 bg-white">
-      <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 sm:py-12">
-        <div className="mb-6 flex items-center gap-3">
-          <div className="rounded-xl bg-ink p-2.5 text-white"><FileText className="h-5 w-5" /></div>
-          <div>
-            <p className="font-bold tracking-[0.18em]">FERNANDO VIEIRA</p>
-            <p className="text-xs tracking-[0.35em] text-slate-500">ADVOGADOS</p>
-          </div>
-        </div>
-        <div className="flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <p className="mb-2 text-sm font-bold uppercase tracking-widest text-brand">Entrevista trabalhista</p>
-            <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">Entrevistas salvas</h1>
-            <p className="mt-3 text-slate-600">Histórico de entrevistas cadastradas no sistema.</p>
-          </div>
-          <Link to="/" className="flex items-center gap-2 rounded-xl bg-ink px-5 py-3 font-bold text-white transition hover:brightness-110"><Plus className="h-5 w-5" />Nova entrevista</Link>
-        </div>
+      <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6">
+        <h1 className="text-2xl font-bold tracking-tight text-slate-950 sm:text-3xl">Entrevistas salvas</h1>
+        <p className="mt-1 text-sm text-slate-500">Histórico de entrevistas cadastradas no sistema.</p>
       </div>
     </header>
 
@@ -75,7 +61,7 @@ export default function Entrevistas() {
         <div className="rounded-2xl border border-slate-200 bg-white p-12 text-center">
           <FileText className="mx-auto mb-3 h-8 w-8 text-slate-300" />
           <p className="font-semibold text-slate-700">Nenhuma entrevista salva ainda.</p>
-          <Link to="/" className="mt-4 inline-flex items-center gap-2 rounded-xl bg-blue-700 px-5 py-3 font-bold text-white transition hover:bg-blue-800"><Plus className="h-5 w-5" />Criar primeira entrevista</Link>
+          <p className="mt-1 text-sm text-slate-500">Use o menu para criar uma nova entrevista.</p>
         </div>
       )}
       {entrevistas !== null && entrevistas.length > 0 && entrevistas.map(item => {
