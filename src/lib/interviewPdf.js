@@ -14,43 +14,31 @@ const txt = (v) => (v === undefined || v === null || v === "" ? "—" : String(v
 const dispensaLabel = (v) =>
   TIPO_DISPENSA_OPTIONS.find((o) => o.value === v)?.label || txt(v);
 
+const RECLAMADAS = [
+  { n: "1ª RECLAMADA", nome: "RECL1_NOME", cnpj: "RECL1_CNPJ", log: "RECL1_LOGRADOURO", compl: "RECL1_ENDCOMPL" },
+  { n: "2ª RECLAMADA", nome: "RECL2_NOME", cnpj: "RECL2_CNPJ", log: "RECL2_LOGRADOURO", compl: "RECL2_ENDCOMPL" },
+  { n: "3ª RECLAMADA", nome: "RECL3_NOME", cnpj: "RECL3_CNPJ", log: "RECL3_LOGRADOURO", compl: "RECL3_ENDCOMPL" },
+];
+
 const SECTIONS = [
   {
-    title: "Modelo de petição",
-    fields: [{ label: "Modelo", get: (d) => txt(d.modelo_peticao) }, { label: "Título", get: (d) => txt(d.titulo) }],
-  },
-  {
-    title: "Identificação do reclamante",
+    title: "Identificação do(a) cliente",
     fields: [
       { label: "Nome", get: (d) => txt(d.RECL_NOME) },
       { label: "Nacionalidade", get: (d) => txt(d.RECL_NACIONALIDADE) },
       { label: "Estado civil", get: (d) => txt(d.RECL_ESTADOCIVIL) },
+      { label: "Nascimento", get: (d) => formatDate(d.RECL_NASC) },
+      { label: "Filiação", get: (d) => txt(d.RECL_FILIACAO) },
       { label: "RG", get: (d) => txt(d.RECL_RG) },
       { label: "CPF", get: (d) => txt(d.RECL_CPF) },
       { label: "PIS", get: (d) => txt(d.RECL_PIS) },
       { label: "CTPS", get: (d) => txt(d.RECL_CTPS) },
       { label: "Série", get: (d) => txt(d.RECL_SERIE) },
-      { label: "Nascimento", get: (d) => formatDate(d.RECL_NASC) },
-      { label: "Filiação", get: (d) => txt(d.RECL_FILIACAO) },
       { label: "Endereço", get: (d) => txt(d.RECL_ENDERECO) },
       { label: "CEP", get: (d) => txt(d.RECL_CEP) },
       { label: "E-mail", get: (d) => txt(d.email) },
       { label: "Telefone", get: (d) => txt(d.telefone) },
       { label: "Função", get: (d) => txt(d.FUNCAO) },
-    ],
-  },
-  {
-    title: "Reclamadas",
-    fields: [
-      { label: "Reclamada 1", get: (d) => txt(d.RECL1_NOME) },
-      { label: "CNPJ 1", get: (d) => txt(d.RECL1_CNPJ) },
-      { label: "Endereço 1", get: (d) => [d.RECL1_LOGRADOURO, d.RECL1_ENDCOMPL].filter(Boolean).join(", ") || "—" },
-      { label: "Reclamada 2", get: (d) => txt(d.RECL2_NOME) },
-      { label: "CNPJ 2", get: (d) => txt(d.RECL2_CNPJ) },
-      { label: "Endereço 2", get: (d) => [d.RECL2_LOGRADOURO, d.RECL2_ENDCOMPL].filter(Boolean).join(", ") || "—" },
-      { label: "Reclamada 3", get: (d) => txt(d.RECL3_NOME) },
-      { label: "CNPJ 3", get: (d) => txt(d.RECL3_CNPJ) },
-      { label: "Endereço 3", get: (d) => [d.RECL3_LOGRADOURO, d.RECL3_ENDCOMPL].filter(Boolean).join(", ") || "—" },
     ],
   },
   {
@@ -63,11 +51,11 @@ const SECTIONS = [
     ],
   },
   {
-    title: "Jornada",
+    title: "Jornada de trabalho",
     fields: [
       { label: "Escala", get: (d) => txt(d.escala) },
       { label: "Horário", get: (d) => txt(d.JORNADA_HORARIO) },
-      { label: "Trabalhava finais de semana/feriados", get: (d) => bool(d.finais_semana) },
+      { label: "Finais de semana/feriados", get: (d) => bool(d.finais_semana) },
       { label: "Adicional noturno", get: (d) => bool(d.tem_adic_noturno) },
     ],
   },
@@ -117,7 +105,7 @@ const SECTIONS = [
   {
     title: "Acúmulo/desvio de função",
     fields: [
-      { label: "Acumulo de função", get: (d) => bool(d.acumulo_funcao) },
+      { label: "Acúmulo de função", get: (d) => bool(d.acumulo_funcao) },
       { label: "Funções acumuladas", get: (d) => txt(d.funcoes_acumuladas) },
     ],
   },
@@ -130,7 +118,7 @@ const SECTIONS = [
     fields: [
       { label: "Recebia gratificação", get: (d) => bool(d.gratificacao) },
       { label: "Qual", get: (d) => txt(d.gratificacao_qual) },
-      { label: "Prêmio de assiduidade prometido", get: (d) => bool(d.assiduidade) },
+      { label: "Prêmio de assiduidade", get: (d) => bool(d.assiduidade) },
       { label: "Valor prometido", get: (d) => txt(d.assiduidade_prometido) },
       { label: "Valor pago", get: (d) => txt(d.assiduidade_pago) },
     ],
@@ -191,88 +179,126 @@ async function loadLogo() {
   return logoCache;
 }
 
+const BRAND = [255, 79, 24];
+const INK = [31, 31, 39];
+const MUTED = [107, 114, 128];
+const LINE = [228, 228, 228];
+
 export async function generateInterviewPdf(data) {
   const doc = new jsPDF({ unit: "pt", format: "a4" });
   const pageW = doc.internal.pageSize.getWidth();
   const pageH = doc.internal.pageSize.getHeight();
   const marginX = 50;
   const contentW = pageW - marginX * 2;
-  let y = 50;
+  let y = 56;
 
   const ensure = (needed) => {
-    if (y + needed > pageH - 40) {
+    if (y + needed > pageH - 44) {
       doc.addPage();
-      y = 50;
+      y = 56;
     }
   };
 
-  // Cabeçalho com a logo do escritório
+  // Cabeçalho centralizado
   const logo = await loadLogo();
   if (logo) {
-    const logoW = 230;
-    const logoH = 52;
-    doc.addImage(logo, "PNG", marginX, y, logoW, logoH);
-    y += logoH + 14;
+    const logoW = 200;
+    const logoH = 46;
+    doc.addImage(logo, "PNG", (pageW - logoW) / 2, y, logoW, logoH);
+    y += logoH + 10;
   } else {
     doc.setFont("helvetica", "bold");
     doc.setFontSize(16);
-    doc.setTextColor(15, 23, 42);
-    doc.text("FERNANDO VIEIRA ADVOGADOS", marginX, y);
-    y += 22;
+    doc.setTextColor(...INK);
+    doc.text("FERNANDO VIEIRA ADVOGADOS", pageW / 2, y + 12, { align: "center" });
+    y += 30;
   }
   doc.setFont("helvetica", "normal");
-  doc.setFontSize(11);
-  doc.setTextColor(100, 116, 139);
-  doc.text("Entrevista trabalhista — Formulário de atendimento", marginX, y);
+  doc.setFontSize(10);
+  doc.setTextColor(...MUTED);
+  doc.text("Entrevista trabalhista — Formulário de atendimento", pageW / 2, y, { align: "center" });
   y += 14;
-  doc.setDrawColor(226, 232, 240);
+  doc.setDrawColor(...LINE);
   doc.line(marginX, y, pageW - marginX, y);
-  y += 18;
+  y += 22;
 
-  if (data.RECL_NOME || data.modelo_peticao) {
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(12);
-    doc.setTextColor(15, 23, 42);
-    doc.text(`Reclamante: ${data.RECL_NOME || "—"}`, marginX, y);
-    y += 16;
+  // Sumário
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(11);
+  doc.setTextColor(...INK);
+  doc.text(`Reclamante: ${data.RECL_NOME || "—"}`, marginX, y);
+  if (data.modelo_peticao) {
     doc.setFont("helvetica", "normal");
-    doc.setFontSize(10);
-    doc.setTextColor(71, 85, 105);
-    doc.text(`Modelo de petição: ${data.modelo_peticao || "—"}`, marginX, y);
-    y += 20;
+    doc.setTextColor(...MUTED);
+    doc.text(`Modelo: ${data.modelo_peticao}`, pageW - marginX, y, { align: "right" });
   }
+  y += 22;
 
-  SECTIONS.forEach((section, idx) => {
-    ensure(40);
+  let sectionIndex = 0;
+
+  const renderField = (label, value, indentX = 0) => {
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(10);
+    doc.setTextColor(...INK);
+    const labelText = `${label}:`;
+    const labelW = doc.getTextWidth(labelText);
+    const valueX = marginX + indentX + labelW + 4;
+    const valueW = marginX + contentW - valueX;
+    const valueStr = String(value);
+    const wrapped = doc.splitTextToSize(valueStr, Math.max(valueW, 60));
+    ensure(wrapped.length * 13 + 6);
+    doc.text(labelText, marginX + indentX, y);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(51, 65, 85);
+    wrapped.forEach((line, i) => {
+      doc.text(line, i === 0 ? valueX : marginX + indentX + labelW + 4, y);
+      y += 13;
+    });
+    y += 4;
+  };
+
+  const renderSectionTitle = (title, idx) => {
+    ensure(30);
+    doc.setFillColor(...BRAND);
+    doc.rect(marginX, y - 9, 3, 11, "F");
     doc.setFont("helvetica", "bold");
     doc.setFontSize(11);
-    doc.setTextColor(30, 41, 59);
-    doc.text(`${idx + 1}. ${section.title}`, marginX, y);
-    y += 14;
+    doc.setTextColor(...INK);
+    doc.text(`${idx}. ${title}`, marginX + 10, y);
+    y += 16;
+  };
+
+  // Identificação do(s) reclamado(s) — bloco por empresa
+  renderSectionTitle("Identificação do(s) reclamado(s)", ++sectionIndex);
+  const temReclamada = RECLAMADAS.some((r) => data[r.nome] || data[r.cnpj] || data[r.log]);
+  if (!temReclamada) {
     doc.setFont("helvetica", "normal");
     doc.setFontSize(10);
-    doc.setTextColor(51, 65, 85);
-
-    section.fields.forEach((f) => {
-      const value = f.get(data);
-      const labelLine = `${f.label}: `;
-      const wrapped = doc.splitTextToSize(`${labelLine}${value}`, contentW);
-      ensure(wrapped.length * 13 + 4);
-      wrapped.forEach((line, i) => {
-        if (i === 0) {
-          doc.setFont("helvetica", "bold");
-          doc.text(f.label + ":", marginX, y);
-          doc.setFont("helvetica", "normal");
-          const labelW = doc.getTextWidth(labelLine);
-          doc.text(value, marginX + labelW, y);
-        } else {
-          doc.text(line, marginX, y);
-        }
-        y += 13;
-      });
+    doc.setTextColor(...MUTED);
+    doc.text("Nenhuma reclamada informada.", marginX, y);
+    y += 16;
+  } else {
+    RECLAMADAS.forEach((r) => {
+      const hasData = data[r.nome] || data[r.cnpj] || data[r.log];
+      if (!hasData) return;
+      ensure(60);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(10);
+      doc.setTextColor(...BRAND);
+      doc.text(r.n, marginX, y);
+      y += 14;
+      renderField("Nome", txt(data[r.nome]));
+      renderField("CNPJ", txt(data[r.cnpj]));
+      renderField("Endereço", [data[r.log], data[r.compl]].filter(Boolean).join(", ") || "—");
       y += 4;
     });
-    y += 6;
+  }
+  y += 6;
+
+  SECTIONS.forEach((section) => {
+    renderSectionTitle(section.title, ++sectionIndex);
+    section.fields.forEach((f) => renderField(f.label, f.get(data)));
+    y += 8;
   });
 
   // Rodapé em todas as páginas
@@ -284,8 +310,9 @@ export async function generateInterviewPdf(data) {
     doc.setTextColor(148, 163, 184);
     doc.text(
       `Gerado em ${new Date().toLocaleString("pt-BR")} · Página ${p}/${pages}`,
-      marginX,
-      pageH - 20
+      pageW / 2,
+      pageH - 20,
+      { align: "center" }
     );
   }
 
