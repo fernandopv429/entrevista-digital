@@ -172,17 +172,26 @@ const LOGO_URL =
   "https://media.base44.com/images/public/6a734d6c72c1f853994b8733/7ed4f9f93_logo_fernando_vieira_laranja1.png";
 
 let logoCache = null;
+// Retorna { dataUrl, width, height } preservando a proporção real da imagem,
+// para o cabeçalho não achatar/esticar o logotipo.
 async function loadLogo() {
   if (logoCache) return logoCache;
   try {
     const res = await fetch(LOGO_URL);
     const blob = await res.blob();
-    logoCache = await new Promise((resolve, reject) => {
+    const dataUrl = await new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onload = () => resolve(reader.result);
       reader.onerror = reject;
       reader.readAsDataURL(blob);
     });
+    const dims = await new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => resolve({ width: img.naturalWidth, height: img.naturalHeight });
+      img.onerror = () => resolve({ width: 0, height: 0 });
+      img.src = dataUrl;
+    });
+    logoCache = { dataUrl, width: dims.width, height: dims.height };
   } catch (e) {
     logoCache = null;
   }
@@ -209,12 +218,15 @@ export async function generateInterviewPdf(data) {
     }
   };
 
-  // Cabeçalho centralizado
+  // Cabeçalho centralizado (proporção real preservada)
   const logo = await loadLogo();
-  if (logo) {
-    const logoW = 200;
-    const logoH = 46;
-    doc.addImage(logo, "PNG", (pageW - logoW) / 2, y, logoW, logoH);
+  if (logo && logo.width && logo.height) {
+    const maxW = 220;
+    const maxH = 80;
+    const scale = Math.min(maxW / logo.width, maxH / logo.height);
+    const logoW = logo.width * scale;
+    const logoH = logo.height * scale;
+    doc.addImage(logo.dataUrl, "PNG", (pageW - logoW) / 2, y, logoW, logoH);
     y += logoH + 10;
   } else {
     doc.setFont("helvetica", "bold");

@@ -16,9 +16,9 @@ export default function Sidebar() {
 
   return (
     <header className="sticky top-0 z-20 px-3 pt-3">
-      <nav className="flex items-center gap-4 rounded-2xl bg-ink px-4 py-3 text-white sm:px-6">
+      <nav className="flex items-center gap-4 rounded-2xl bg-ink px-4 py-4 text-white sm:px-6">
         <div className="flex items-center">
-          <Image src="https://media.base44.com/images/public/6a734d6c72c1f853994b8733/7ed4f9f93_logo_fernando_vieira_laranja1.png" alt="Fernando Vieira Advogados" className="h-9 w-36" fittingType="fit" />
+          <Image src="https://media.base44.com/images/public/6a734d6c72c1f853994b8733/7ed4f9f93_logo_fernando_vieira_laranja1.png" alt="Fernando Vieira Advogados" className="h-12 w-56" fittingType="fit" />
         </div>
 
         <div className="ml-auto flex items-center gap-2">
