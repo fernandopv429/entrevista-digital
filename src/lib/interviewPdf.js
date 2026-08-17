@@ -236,6 +236,34 @@ export async function generateInterviewPdf(data) {
 
   let sectionIndex = 0;
 
+  const renderReclamadas = () => {
+    renderSectionTitle("Identificação do(s) reclamado(s)", ++sectionIndex);
+    const temReclamada = RECLAMADAS.some((r) => data[r.nome] || data[r.cnpj] || data[r.log]);
+    if (!temReclamada) {
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(10);
+      doc.setTextColor(...MUTED);
+      doc.text("Nenhuma reclamada informada.", marginX, y);
+      y += 16;
+    } else {
+      RECLAMADAS.forEach((r) => {
+        const hasData = data[r.nome] || data[r.cnpj] || data[r.log];
+        if (!hasData) return;
+        ensure(60);
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(10);
+        doc.setTextColor(...BRAND);
+        doc.text(r.n, marginX, y);
+        y += 14;
+        renderField("Nome", txt(data[r.nome]));
+        renderField("CNPJ", txt(data[r.cnpj]));
+        renderField("Endereço", [data[r.log], data[r.compl]].filter(Boolean).join(", ") || "—");
+        y += 4;
+      });
+    }
+    y += 6;
+  };
+
   const renderField = (label, value, indentX = 0) => {
     doc.setFont("helvetica", "bold");
     doc.setFontSize(10);
@@ -268,37 +296,12 @@ export async function generateInterviewPdf(data) {
     y += 16;
   };
 
-  // Identificação do(s) reclamado(s) — bloco por empresa
-  renderSectionTitle("Identificação do(s) reclamado(s)", ++sectionIndex);
-  const temReclamada = RECLAMADAS.some((r) => data[r.nome] || data[r.cnpj] || data[r.log]);
-  if (!temReclamada) {
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(10);
-    doc.setTextColor(...MUTED);
-    doc.text("Nenhuma reclamada informada.", marginX, y);
-    y += 16;
-  } else {
-    RECLAMADAS.forEach((r) => {
-      const hasData = data[r.nome] || data[r.cnpj] || data[r.log];
-      if (!hasData) return;
-      ensure(60);
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(10);
-      doc.setTextColor(...BRAND);
-      doc.text(r.n, marginX, y);
-      y += 14;
-      renderField("Nome", txt(data[r.nome]));
-      renderField("CNPJ", txt(data[r.cnpj]));
-      renderField("Endereço", [data[r.log], data[r.compl]].filter(Boolean).join(", ") || "—");
-      y += 4;
-    });
-  }
-  y += 6;
-
-  SECTIONS.forEach((section) => {
+  SECTIONS.forEach((section, idx) => {
     renderSectionTitle(section.title, ++sectionIndex);
     section.fields.forEach((f) => renderField(f.label, f.get(data)));
     y += 8;
+    // Após a identificação do cliente, vêm as reclamadas (ordem do modelo .docx)
+    if (idx === 0) renderReclamadas();
   });
 
   // Rodapé em todas as páginas
