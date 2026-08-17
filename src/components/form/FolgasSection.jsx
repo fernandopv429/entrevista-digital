@@ -26,6 +26,12 @@ export default function FolgasSection({ data, onChange, onChoice }) {
         <Select label="Forma de recebimento" name="ft_pagamento" value={data.ft_pagamento} options={FT_PAGAMENTO_OPTIONS} onChange={onChange} required />
         <YesNo label="Possui comprovante de pagamento?" name="ft_comprovante" value={data.ft_comprovante} onChange={onChoice} />
       </div>
+      <div className="grid gap-x-6 gap-y-7 sm:grid-cols-2">
+        <YesNo label="Conciliava jornada?" name="folgas_conciliava" value={data.folgas_conciliava} onChange={onChoice} />
+        {data.folgas_conciliava === true && (
+          <Field label="Período que conciliou" name="folgas_periodo_conciliou" value={data.folgas_periodo_conciliou} onChange={onChange} placeholder="Ex.: jan/2024 a mar/2025" />
+        )}
+      </div>
       <p className="text-sm text-slate-600">
         A forma de recebimento importa por si: Pix ou dinheiro caracterizam pagamento por fora e
         acionam o pedido de integração ao salário, com reflexos em DSR, aviso prévio, 13º,

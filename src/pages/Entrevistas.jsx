@@ -83,6 +83,7 @@ export default function Entrevistas() {
           { razao_social: item.RECL1_NOME, cnpj: item.RECL1_CNPJ },
           { razao_social: item.RECL2_NOME, cnpj: item.RECL2_CNPJ },
           { razao_social: item.RECL3_NOME, cnpj: item.RECL3_CNPJ },
+          { razao_social: item.RECL4_NOME, cnpj: item.RECL4_CNPJ },
         ].filter(r => r.razao_social);
         return (
         <article key={item.id} className="rounded-3xl border border-black/5 bg-white p-5 shadow-[0_2px_12px_rgba(0,0,0,0.04)] sm:p-6">

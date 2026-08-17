@@ -39,13 +39,16 @@ export default function Home() {
   // é lido quando finais_semana=Sim, mesmo com folgas_trabalhadas=Não). É o
   // mesmo problema que a 2ª reclamada tinha ao ser "removida".
   const DEPENDENTES = {
-    folgas_trabalhadas: ['FT_QTD_MEDIA', 'VAL_FT', 'ft_pagamento'],
+    folgas_trabalhadas: ['FT_QTD_MEDIA', 'VAL_FT', 'ft_pagamento', 'folgas_conciliava', 'folgas_periodo_conciliou'],
     intervalo_suprimido: ['INTERVALO_GOZADO'],
-    horas_extras: ['media_horas_extras', 'periodo_antecedente', 'periodo_sucedente'],
+    horas_extras: ['media_horas_extras', 'periodo_antecedente', 'periodo_sucedente', 'controle_ponto', 'formato_ponto'],
     acumulo_funcao: ['funcoes_acumuladas'],
     gratificacao: ['gratificacao_qual'],
     assiduidade: ['assiduidade_prometido', 'assiduidade_pago'],
     vale_transporte: ['VAL_CONDUCAO'],
+    vale_refeicao: ['VALOR_VALE_REFEICAO'],
+    tem_insalubridade: ['insalubridade_porcentagem'],
+    tem_periculosidade: ['periculosidade_porcentagem'],
   };
   const choice = (name, value) => {
     setSaved(false);

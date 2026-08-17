@@ -15,9 +15,10 @@ const dispensaLabel = (v) =>
   TIPO_DISPENSA_OPTIONS.find((o) => o.value === v)?.label || txt(v);
 
 const RECLAMADAS = [
-  { n: "1ª RECLAMADA", nome: "RECL1_NOME", cnpj: "RECL1_CNPJ", log: "RECL1_LOGRADOURO", compl: "RECL1_ENDCOMPL" },
-  { n: "2ª RECLAMADA", nome: "RECL2_NOME", cnpj: "RECL2_CNPJ", log: "RECL2_LOGRADOURO", compl: "RECL2_ENDCOMPL" },
-  { n: "3ª RECLAMADA", nome: "RECL3_NOME", cnpj: "RECL3_CNPJ", log: "RECL3_LOGRADOURO", compl: "RECL3_ENDCOMPL" },
+  { n: "1ª RECLAMADA", nome: "RECL1_NOME", cnpj: "RECL1_CNPJ", log: "RECL1_LOGRADOURO", compl: "RECL1_ENDCOMPL", cep: "RECL1_CEP", tempo: "RECL1_TEMPO_LABORADO", escala: "RECL1_ESCALA_HORARIO" },
+  { n: "2ª RECLAMADA", nome: "RECL2_NOME", cnpj: "RECL2_CNPJ", log: "RECL2_LOGRADOURO", compl: "RECL2_ENDCOMPL", cep: "RECL2_CEP", tempo: "RECL2_TEMPO_LABORADO", escala: "RECL2_ESCALA_HORARIO" },
+  { n: "3ª RECLAMADA", nome: "RECL3_NOME", cnpj: "RECL3_CNPJ", log: "RECL3_LOGRADOURO", compl: "RECL3_ENDCOMPL", cep: "RECL3_CEP", tempo: "RECL3_TEMPO_LABORADO", escala: "RECL3_ESCALA_HORARIO" },
+  { n: "4ª RECLAMADA", nome: "RECL4_NOME", cnpj: "RECL4_CNPJ", log: "RECL4_LOGRADOURO", compl: "RECL4_ENDCOMPL", cep: "RECL4_CEP", tempo: "RECL4_TEMPO_LABORADO", escala: "RECL4_ESCALA_HORARIO" },
 ];
 
 const SECTIONS = [
@@ -46,8 +47,10 @@ const SECTIONS = [
     fields: [
       { label: "Admissão", get: (d) => formatDate(d.DATA_ADMISSAO) },
       { label: "Rescisão", get: (d) => formatDate(d.DATA_RESCISAO) },
+      { label: "Último dia trabalhado", get: (d) => formatDate(d.ULTIMO_DIA_TRABALHADO) },
       { label: "Salário-base", get: (d) => txt(d.SALARIO) },
       { label: "Tipo de dispensa", get: (d) => dispensaLabel(d.tipo_dispensa) },
+      { label: "Responsável hierárquico", get: (d) => txt(d.RESPONSAVEL_HIERARQUICO) },
     ],
   },
   {
@@ -63,6 +66,7 @@ const SECTIONS = [
     title: "Benefícios",
     fields: [
       { label: "Vale-refeição", get: (d) => bool(d.vale_refeicao) },
+      { label: "Valor do vale-refeição", get: (d) => txt(d.VALOR_VALE_REFEICAO) },
       { label: "Vale-alimentação", get: (d) => bool(d.vale_alimentacao) },
       { label: "Valor do auxílio-alimentação", get: (d) => txt(d.VALOR_AUX_ALIMENTACAO) },
       { label: "Vale-transporte", get: (d) => bool(d.vale_transporte) },
@@ -84,6 +88,8 @@ const SECTIONS = [
       { label: "Valor", get: (d) => txt(d.VAL_FT) },
       { label: "Forma de pagamento", get: (d) => txt(d.ft_pagamento) },
       { label: "Possui comprovante", get: (d) => bool(d.ft_comprovante) },
+      { label: "Conciliava jornada", get: (d) => bool(d.folgas_conciliava) },
+      { label: "Período que conciliou", get: (d) => txt(d.folgas_periodo_conciliou) },
     ],
   },
   {
@@ -100,6 +106,8 @@ const SECTIONS = [
       { label: "Média", get: (d) => txt(d.media_horas_extras) },
       { label: "Período antecedente", get: (d) => txt(d.periodo_antecedente) },
       { label: "Período sucedente", get: (d) => txt(d.periodo_sucedente) },
+      { label: "Controle de ponto", get: (d) => bool(d.controle_ponto) },
+      { label: "Formato do ponto", get: (d) => txt(d.formato_ponto) },
     ],
   },
   {
@@ -143,7 +151,9 @@ const SECTIONS = [
     fields: [
       { label: "Possui doença", get: (d) => bool(d.tem_doenca) },
       { label: "Insalubridade", get: (d) => bool(d.tem_insalubridade) },
+      { label: "Insalubridade (%)", get: (d) => txt(d.insalubridade_porcentagem) },
       { label: "Periculosidade", get: (d) => bool(d.tem_periculosidade) },
+      { label: "Periculosidade (%)", get: (d) => txt(d.periculosidade_porcentagem) },
       { label: "Produtos", get: (d) => txt(d.produtos) },
       { label: "EPI", get: (d) => txt(d.epi) },
     ],
@@ -258,6 +268,9 @@ export async function generateInterviewPdf(data) {
         renderField("Nome", txt(data[r.nome]));
         renderField("CNPJ", txt(data[r.cnpj]));
         renderField("Endereço", [data[r.log], data[r.compl]].filter(Boolean).join(", ") || "—");
+        renderField("CEP", txt(data[r.cep]));
+        renderField("Tempo laborado", txt(data[r.tempo]));
+        renderField("Escala/Horário", txt(data[r.escala]));
         y += 4;
       });
     }

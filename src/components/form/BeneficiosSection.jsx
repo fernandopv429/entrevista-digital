@@ -22,7 +22,8 @@ export default function BeneficiosSection({ data, onChange, onChoice }) {
       <YesNo label="Vale-transporte" name="vale_transporte" value={data.vale_transporte} onChange={onChoice} />
     </div>
     {(temAlimentacao || data.vale_transporte) && <>
-      <div className="grid gap-5 sm:grid-cols-2">
+      <div className="grid gap-5 sm:grid-cols-3">
+        {data.vale_refeicao && <Field label="Valor diário do vale-refeição (opcional)" name="VALOR_VALE_REFEICAO" value={data.VALOR_VALE_REFEICAO} onChange={onChange} format="currency" placeholder="Ex.: R$ 25,00" />}
         {temAlimentacao && <Field label="Valor diário do auxílio-alimentação (opcional)" name="VALOR_AUX_ALIMENTACAO" value={data.VALOR_AUX_ALIMENTACAO} onChange={onChange} format="currency" placeholder="Ex.: R$ 37,00" />}
         {data.vale_transporte && <Field label="Valor diário da condução (opcional)" name="VAL_CONDUCAO" value={data.VAL_CONDUCAO} onChange={onChange} format="currency" placeholder="Ex.: R$ 10,00" />}
       </div>
