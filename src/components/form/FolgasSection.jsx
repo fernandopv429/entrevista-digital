@@ -32,6 +32,11 @@ export default function FolgasSection({ data, onChange, onChoice }) {
           <Field label="Período que conciliou" name="folgas_periodo_conciliou" value={data.folgas_periodo_conciliou} onChange={onChange} placeholder="Ex.: jan/2024 a mar/2025" />
         )}
       </div>
+      <div className="grid gap-x-6 gap-y-7 sm:grid-cols-2">
+        <Field label="Salários em aberto — quais meses" name="SALARIOS_ABERTO" value={data.SALARIOS_ABERTO} onChange={onChange} placeholder="Ex.: outubro e novembro/2025" />
+        <Field label="Salários em aberto — qtd. de meses" name="SALARIOS_ABERTO_QTD" value={data.SALARIOS_ABERTO_QTD} onChange={onChange} type="number" placeholder="Ex.: 2" />
+        <Field label="Valor 'por fora' por mês" name="VALOR_POR_FORA" value={data.VALOR_POR_FORA} onChange={onChange} format="currency" placeholder="Ex.: R$ 500,00" />
+      </div>
       <p className="text-sm text-slate-600">
         A forma de recebimento importa por si: Pix ou dinheiro caracterizam pagamento por fora e
         acionam o pedido de integração ao salário, com reflexos em DSR, aviso prévio, 13º,

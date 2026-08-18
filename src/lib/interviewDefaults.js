@@ -53,6 +53,7 @@ export const interviewDefaults = {
 
   folgas_trabalhadas: undefined, FT_QTD_MEDIA: "", VAL_FT: "", ft_pagamento: "", ft_comprovante: undefined,
   folgas_conciliava: undefined, folgas_periodo_conciliou: "",
+  SALARIOS_ABERTO: "", SALARIOS_ABERTO_QTD: "", VALOR_POR_FORA: "",
 
   intervalo_suprimido: undefined, INTERVALO_GOZADO: "",
 
@@ -128,6 +129,7 @@ export const interviewExample = {
   ferias: true, ferias_quantidade: "Proporcional",
   folgas_trabalhadas: true, FT_QTD_MEDIA: "5 a 6", VAL_FT: "R$ 180,00", ft_pagamento: "Pix", ft_comprovante: false,
   folgas_conciliava: false, folgas_periodo_conciliou: "",
+  SALARIOS_ABERTO: "outubro e novembro/2025", SALARIOS_ABERTO_QTD: 2, VALOR_POR_FORA: "R$ 500,00",
   intervalo_suprimido: true, INTERVALO_GOZADO: "15 minutos",
   horas_extras: true, media_horas_extras: "Até 1 hora", periodo_antecedente: "30 minutos", periodo_sucedente: "30 minutos",
   controle_ponto: true, formato_ponto: "Catraca eletrônica",

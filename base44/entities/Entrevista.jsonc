@@ -232,6 +232,18 @@
     "folgas_periodo_conciliou": {
       "type": "string"
     },
+    "SALARIOS_ABERTO": {
+      "type": "string",
+      "description": "Quais meses de sal\u00e1rio permaneceram em aberto (ex.: 'outubro e novembro/2025')."
+    },
+    "SALARIOS_ABERTO_QTD": {
+      "type": "number",
+      "description": "Quantidade de meses de sal\u00e1rio em aberto."
+    },
+    "VALOR_POR_FORA": {
+      "type": "string",
+      "description": "Valor mensal recebido 'por fora' (\u00e0 parte do valor da folga trabalhada), em reais (ex.: R$ 500,00)."
+    },
     "intervalo_suprimido": {
       "type": "boolean"
     },

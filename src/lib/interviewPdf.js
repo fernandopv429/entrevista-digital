@@ -90,6 +90,9 @@ const SECTIONS = [
       { label: "Possui comprovante", get: (d) => bool(d.ft_comprovante) },
       { label: "Conciliava jornada", get: (d) => bool(d.folgas_conciliava) },
       { label: "Período que conciliou", get: (d) => txt(d.folgas_periodo_conciliou) },
+      { label: "Salários em aberto (meses)", get: (d) => txt(d.SALARIOS_ABERTO) },
+      { label: "Salários em aberto (qtd.)", get: (d) => txt(d.SALARIOS_ABERTO_QTD) },
+      { label: "Valor 'por fora' por mês", get: (d) => txt(d.VALOR_POR_FORA) },
     ],
   },
   {
