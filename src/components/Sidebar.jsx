@@ -1,6 +1,6 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
-import { Home, FileText, LogOut } from "lucide-react";
+import { NavLink, useLocation } from "react-router-dom";
+import { Home, FileText, FlaskConical, LogOut } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
 const items = [
@@ -9,8 +9,12 @@ const items = [
 ];
 
 export default function Sidebar() {
+  const { pathname } = useLocation();
   const handleLogout = async () => {
     await base44.auth.logout();
+  };
+  const carregarExemplo = () => {
+    window.dispatchEvent(new Event("entrevista:carregar-exemplo"));
   };
 
   return (
@@ -32,6 +36,17 @@ export default function Sidebar() {
               <span className="hidden sm:inline">{label}</span>
             </NavLink>
           ))}
+          {pathname === "/" && (
+            <button
+              type="button"
+              onClick={carregarExemplo}
+              title="Carregar exemplo"
+              className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold text-brand-ink transition hover:bg-white/5"
+            >
+              <FlaskConical className="h-4 w-4" />
+              <span className="hidden sm:inline">Exemplo</span>
+            </button>
+          )}
           <button
             type="button"
             onClick={handleLogout}
