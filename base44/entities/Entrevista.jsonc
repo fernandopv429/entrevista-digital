@@ -247,7 +247,7 @@
     "intervalo_suprimido": {
       "type": "boolean"
     },
-    "INTERVALO_GOZADO": {
+    "INTERVALO_USUFRUIDO": {
       "type": "string"
     },
     "horas_extras": {
