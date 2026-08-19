@@ -1,4 +1,3 @@
-export const MODELO_PETICAO_OPTIONS = ["Vigilante 12x36", "Porteiro/Controlador - SINDEEPRES", "Porteiro/Controlador - SIEMACO", "Limpeza - SIEMACO", "Genérico"];
 export const ESCALA_OPTIONS = ["12x36", "5x2 (8h diárias)", "6x1 (8h diárias)", "4x2 (12h)", "Plantão 24h", "Outra"];
 export const TIPO_DISPENSA_OPTIONS = [
   { value: "sem_justa_causa", label: "Sem justa causa" },

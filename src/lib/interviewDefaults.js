@@ -5,7 +5,6 @@
 // "Não", e um "Não" presumido derruba a tese silenciosamente.
 
 export const interviewDefaults = {
-  modelo_peticao: "",
   titulo: "",
 
   RECL_NOME: "",
@@ -85,7 +84,6 @@ export const interviewDefaults = {
 // Os CNPJs abaixo são inválidos de propósito (não passam no dígito verificador).
 export const interviewExample = {
   ...interviewDefaults,
-  modelo_peticao: "",
   titulo: "EXEMPLO — não protocolar",
 
   RECL_NOME: "JOÃO EXEMPLO DA SILVA",

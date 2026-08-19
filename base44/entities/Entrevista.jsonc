@@ -2,9 +2,6 @@
   "name": "Entrevista",
   "type": "object",
   "properties": {
-    "modelo_peticao": {
-      "type": "string"
-    },
     "titulo": {
       "type": "string"
     },

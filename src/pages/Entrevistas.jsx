@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FileText, Loader2, Building2, CalendarDays, Send, CheckCircle2, AlertCircle, Tag, Download } from "lucide-react";
+import { FileText, Loader2, Building2, CalendarDays, Send, CheckCircle2, AlertCircle, Download } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { TIPO_DISPENSA_OPTIONS } from "@/lib/interviewOptions";
 import { generateInterviewPdf } from "@/lib/interviewPdf";
@@ -81,9 +81,6 @@ export default function Entrevistas() {
             </div>
             <div className="flex flex-col items-end gap-1.5">
               <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600"><CalendarDays className="h-3.5 w-3.5" />{formatDate(item.created_date)}</span>
-              {item.modelo_peticao
-                ? <span className="inline-flex items-center gap-1.5 rounded-full bg-orange-100 px-3 py-1 text-xs font-semibold text-[#E64A19]"><Tag className="h-3.5 w-3.5" />{item.modelo_peticao}</span>
-                : <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800"><AlertCircle className="h-3.5 w-3.5" />Sem modelo</span>}
             </div>
           </div>
           <div className="mt-4 grid gap-3 sm:grid-cols-2">

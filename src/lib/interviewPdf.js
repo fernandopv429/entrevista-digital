@@ -252,11 +252,6 @@ export async function generateInterviewPdf(data) {
   doc.setFontSize(11);
   doc.setTextColor(...INK);
   doc.text(`Reclamante: ${data.RECL_NOME || "—"}`, marginX, y);
-  if (data.modelo_peticao) {
-    doc.setFont("helvetica", "normal");
-    doc.setTextColor(...MUTED);
-    doc.text(`Modelo: ${data.modelo_peticao}`, pageW - marginX, y, { align: "right" });
-  }
   y += 22;
 
   let sectionIndex = 0;
