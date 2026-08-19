@@ -48,7 +48,7 @@ export default function Home() {
   // mesmo problema que a 2ª reclamada tinha ao ser "removida".
   const DEPENDENTES = {
     folgas_trabalhadas: ['FT_QTD_MEDIA', 'VAL_FT', 'ft_pagamento', 'folgas_conciliava', 'folgas_periodo_conciliou', 'SALARIOS_ABERTO', 'SALARIOS_ABERTO_QTD', 'VALOR_POR_FORA'],
-    intervalo_suprimido: ['INTERVALO_GOZADO'],
+    intervalo_suprimido: ['INTERVALO_USUFRUIDO'],
     horas_extras: ['media_horas_extras', 'periodo_antecedente', 'periodo_sucedente', 'controle_ponto', 'formato_ponto'],
     acumulo_funcao: ['funcoes_acumuladas'],
     gratificacao: ['gratificacao_qual'],

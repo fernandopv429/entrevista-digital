@@ -99,7 +99,7 @@ const SECTIONS = [
     title: "Intervalo intrajornada",
     fields: [
       { label: "Intervalo suprimido", get: (d) => bool(d.intervalo_suprimido) },
-      { label: "Intervalo gozado", get: (d) => txt(d.INTERVALO_GOZADO) },
+      { label: "Intervalo usufruído", get: (d) => txt(d.INTERVALO_USUFRUIDO) },
     ],
   },
   {
