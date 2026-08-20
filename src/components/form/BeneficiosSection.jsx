@@ -1,6 +1,7 @@
 import React from "react";
 import SectionCard from "@/components/form/SectionCard";
 import { Field, YesNo } from "@/components/form/FormFields";
+import { hasEmpty } from "@/lib/sectionCompleteness";
 
 // Estes dois valores alimentam os itens "auxílio-alimentação nas folgas" e
 // "vale-transporte nas folgas" (mathUtils.js:458 e :464).
@@ -15,7 +16,11 @@ import { Field, YesNo } from "@/components/form/FormFields";
 export default function BeneficiosSection({ data, onChange, onChoice }) {
   const temAlimentacao = data.vale_alimentacao || data.vale_refeicao;
   const temFolgas = data.folgas_trabalhadas === true;
-  return <SectionCard number="6" title="Benefícios"><div className="space-y-6">
+  const visiveis = ["vale_refeicao","vale_alimentacao","vale_transporte"];
+  if (data.vale_refeicao) visiveis.push("VALOR_VALE_REFEICAO");
+  if (temAlimentacao) visiveis.push("VALOR_AUX_ALIMENTACAO");
+  if (data.vale_transporte) visiveis.push("VAL_CONDUCAO");
+  return <SectionCard number="6" title="Benefícios" incomplete={hasEmpty(data, visiveis)}><div className="space-y-6">
     <div className="grid gap-7 sm:grid-cols-3">
       <YesNo label="Vale-refeição" name="vale_refeicao" value={data.vale_refeicao} onChange={onChoice} />
       <YesNo label="Vale-alimentação" name="vale_alimentacao" value={data.vale_alimentacao} onChange={onChoice} />

@@ -1,9 +1,12 @@
 import React from "react";
 import SectionCard from "@/components/form/SectionCard";
 import { Field } from "@/components/form/FormFields";
+import { hasEmpty } from "@/lib/sectionCompleteness";
+
+const FIELDS = ["titulo","RECL_NOME","RECL_NACIONALIDADE","RECL_ESTADOCIVIL","RECL_RG","RECL_CPF","RECL_PIS","RECL_CTPS","RECL_SERIE","RECL_NASC","RECL_FILIACAO","RECL_ENDERECO","RECL_CEP","email","telefone"];
 
 export default function IdentificationSection({ data, onChange }) {
-  return <SectionCard number="1" title="Identificação do cliente"><div className="grid gap-5 sm:grid-cols-2">
+  return <SectionCard number="1" title="Identificação do cliente" incomplete={hasEmpty(data, FIELDS)}><div className="grid gap-5 sm:grid-cols-2">
     <div className="sm:col-span-2"><Field label="Título do caso" name="titulo" value={data.titulo} onChange={onChange} placeholder="Ex.: Fernando x Belfort" /></div>
     <div className="sm:col-span-2"><Field label="Nome completo" name="RECL_NOME" value={data.RECL_NOME} onChange={onChange} required /></div>
     <Field label="Nacionalidade" name="RECL_NACIONALIDADE" value={data.RECL_NACIONALIDADE} onChange={onChange} />

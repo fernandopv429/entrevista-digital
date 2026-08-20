@@ -2,10 +2,16 @@ import React from "react";
 import SectionCard from "@/components/form/SectionCard";
 import { Field, Select, YesNo } from "@/components/form/FormFields";
 import { HORAS_EXTRAS_OPTIONS, MINUTOS_OPTIONS } from "@/lib/interviewOptions";
+import { hasEmpty } from "@/lib/sectionCompleteness";
 
 export default function HorasExtrasSection({ data, onChange, onChoice }) {
   const fazia = data.horas_extras === true;
-  return <SectionCard number="10" title="Horas extras"><div className="space-y-6">
+  let visiveis = ["horas_extras"];
+  if (fazia) {
+    visiveis.push("media_horas_extras","controle_ponto","periodo_antecedente","periodo_sucedente");
+    if (data.controle_ponto === true) visiveis.push("formato_ponto");
+  }
+  return <SectionCard number="10" title="Horas extras" incomplete={hasEmpty(data, visiveis)}><div className="space-y-6">
     <YesNo label="Realizava horas extras?" name="horas_extras" value={data.horas_extras} onChange={onChoice} />
     {fazia && (
       <div className="space-y-6">

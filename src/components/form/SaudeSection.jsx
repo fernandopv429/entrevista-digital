@@ -1,9 +1,13 @@
 import React from "react";
 import SectionCard from "@/components/form/SectionCard";
 import { Field, YesNo } from "@/components/form/FormFields";
+import { hasEmpty } from "@/lib/sectionCompleteness";
 
 export default function SaudeSection({ data, onChange, onChoice }) {
-  return <SectionCard number="16" title="Saúde e segurança"><div className="space-y-6">
+  let visiveis = ["tem_doenca","tem_insalubridade","tem_periculosidade","produtos","epi"];
+  if (data.tem_insalubridade === true) visiveis.push("insalubridade_porcentagem");
+  if (data.tem_periculosidade === true) visiveis.push("periculosidade_porcentagem");
+  return <SectionCard number="16" title="Saúde e segurança" incomplete={hasEmpty(data, visiveis)}><div className="space-y-6">
     <div className="grid gap-x-6 gap-y-7 sm:grid-cols-2">
       <YesNo label="Doença ou acidente de trabalho?" name="tem_doenca" value={data.tem_doenca} onChange={onChoice} />
       <YesNo label="Insalubridade?" name="tem_insalubridade" value={data.tem_insalubridade} onChange={onChoice} />

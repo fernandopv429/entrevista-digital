@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import SectionCard from "@/components/form/SectionCard";
 import { Field, Select } from "@/components/form/FormFields";
 import { ESCALA_OPTIONS } from "@/lib/interviewOptions";
+import { hasEmpty } from "@/lib/sectionCompleteness";
 
 // Bloco precisa viver FORA do componente. Declarado dentro de
 // ReclamadasSection, ele é recriado a cada render e o React desmonta/remonta
@@ -41,7 +42,13 @@ export default function ReclamadasSection({ data, onChange }) {
   const remover3 = () => { limpar("RECL3"); limpar("RECL4"); setShow4(false); setShow3(false); };
   const remover4 = () => { limpar("RECL4"); setShow4(false); };
 
-  return <SectionCard number="2" title="Reclamadas, função e jornada"><div className="space-y-6">
+  const RECL_FIELDS = ["NOME","CNPJ","LOGRADOURO","ENDCOMPL","CEP","TEMPO_LABORADO","ESCALA_HORARIO"];
+  const visiveis = ["FUNCAO","escala","JORNADA_HORARIO", ...RECL_FIELDS.map(f => `RECL1_${f}`)];
+  if (show2) visiveis.push(...RECL_FIELDS.map(f => `RECL2_${f}`));
+  if (show2 && show3) visiveis.push(...RECL_FIELDS.map(f => `RECL3_${f}`));
+  if (show2 && show3 && show4) visiveis.push(...RECL_FIELDS.map(f => `RECL4_${f}`));
+
+  return <SectionCard number="2" title="Reclamadas, função e jornada" incomplete={hasEmpty(data, visiveis)}><div className="space-y-6">
     <div className="grid gap-5 sm:grid-cols-3">
       <Field label="Função exercida (cargo)" name="FUNCAO" value={data.FUNCAO} onChange={onChange} />
       <Select label="Escala (geral)" name="escala" value={data.escala} options={ESCALA_OPTIONS} onChange={onChange} />

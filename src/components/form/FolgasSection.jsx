@@ -3,13 +3,19 @@ import { AlertCircle } from "lucide-react";
 import SectionCard from "@/components/form/SectionCard";
 import { Field, Select, YesNo } from "@/components/form/FormFields";
 import { FOLGAS_OPTIONS_ATIVO, FT_PAGAMENTO_OPTIONS } from "@/lib/interviewOptions";
+import { hasEmpty } from "@/lib/sectionCompleteness";
 
 // Os campos secundarios so aparecem (e passam a ser obrigatorios) quando a
 // resposta e "Sim". Sem quantidade e sem valor, o gerador nao consegue liquidar
 // as folgas e o item simplesmente NAO entra no rol de pedidos, em silencio.
 export default function FolgasSection({ data, onChange, onChoice }) {
   const trabalhou = data.folgas_trabalhadas === true;
-  return <SectionCard number="8" title="Folgas trabalhadas (FT)"><div className="space-y-6">
+  let visiveis = ["folgas_trabalhadas"];
+  if (trabalhou) {
+    visiveis = visiveis.concat(["FT_QTD_MEDIA","VAL_FT","ft_pagamento","ft_comprovante","folgas_conciliava","SALARIOS_ABERTO","SALARIOS_ABERTO_QTD","VALOR_POR_FORA"]);
+    if (data.folgas_conciliava === true) visiveis.push("folgas_periodo_conciliou");
+  }
+  return <SectionCard number="8" title="Folgas trabalhadas (FT)" incomplete={hasEmpty(data, visiveis)}><div className="space-y-6">
     <YesNo label="Trabalhou folgas?" name="folgas_trabalhadas" value={data.folgas_trabalhadas} onChange={onChoice} />
     {trabalhou && <>
       <div className="flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
