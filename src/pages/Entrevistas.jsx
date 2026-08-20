@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { FileText, Loader2, Building2, CalendarDays, Send, CheckCircle2, AlertCircle, Download } from "lucide-react";
+import { Link } from "react-router-dom";
+import { FileText, Loader2, Building2, CalendarDays, Send, CheckCircle2, AlertCircle, Download, Pencil } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { TIPO_DISPENSA_OPTIONS } from "@/lib/interviewOptions";
 import { generateInterviewPdf } from "@/lib/interviewPdf";
@@ -105,6 +106,7 @@ export default function Entrevistas() {
           )}
           <div className="mt-4 flex flex-wrap items-center gap-3 border-t border-slate-100 pt-4">
             <button type="button" onClick={() => generateInterviewPdf(item)} className="inline-flex items-center gap-2 rounded-xl border border-black/10 bg-white px-4 py-2 text-sm font-bold text-ink transition hover:bg-black/5"><Download className="h-4 w-4" />Baixar PDF</button>
+            <Link to={`/entrevistas/${item.id}/editar`} className="inline-flex items-center gap-2 rounded-xl border border-black/10 bg-white px-4 py-2 text-sm font-bold text-ink transition hover:bg-black/5"><Pencil className="h-4 w-4" />Editar</Link>
             <button type="button" onClick={() => resend(item)} disabled={!!resending[item.id]} className="inline-flex items-center gap-2 rounded-xl bg-brand px-4 py-2 text-sm font-bold text-white transition hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-60">
               {resending[item.id] ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
               {resending[item.id] ? "Enviando..." : "Reenviar evento"}

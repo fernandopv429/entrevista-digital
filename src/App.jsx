@@ -8,6 +8,7 @@ import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import ScrollToTop from './components/ScrollToTop';
 import Home from '@/pages/Home';
 import Entrevistas from '@/pages/Entrevistas';
+import EditarEntrevista from '@/pages/EditarEntrevista';
 import AppLayout from '@/components/AppLayout';
 // Add page imports here
 
@@ -41,6 +42,7 @@ const AuthenticatedApp = () => {
     <Route element={<AppLayout />}>
       <Route path="/" element={<Home />} />
       <Route path="/entrevistas" element={<Entrevistas />} />
+      <Route path="/entrevistas/:id/editar" element={<EditarEntrevista />} />
     </Route>
     <Route path="*" element={<PageNotFound />} />
     </Routes>
