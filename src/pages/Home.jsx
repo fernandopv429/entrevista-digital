@@ -61,7 +61,7 @@ export default function Home() {
     setSaved(false);
     setData(v => {
       const next = { ...v, [name]: value };
-      if (value === false) for (const campo of DEPENDENTES[name] || []) next[campo] = '';
+      if (value === false) for (const campo of DEPENDENTES[name] || []) next[campo] = undefined;
       // O valor do auxílio-alimentação serve a dois booleanos; só zera quando os dois caírem.
       if (!next.vale_alimentacao && !next.vale_refeicao) next.VALOR_AUX_ALIMENTACAO = '';
       return next;
@@ -76,8 +76,9 @@ export default function Home() {
     setSaving(true);
     const payload = { ...data };
     const qtd = payload.SALARIOS_ABERTO_QTD;
-    if (qtd === "" || qtd === null || qtd === undefined) delete payload.SALARIOS_ABERTO_QTD;
-    else payload.SALARIOS_ABERTO_QTD = Number(qtd);
+    const qtdNum = Number(qtd);
+    if (qtd === "" || qtd === null || qtd === undefined || !Number.isFinite(qtdNum)) delete payload.SALARIOS_ABERTO_QTD;
+    else payload.SALARIOS_ABERTO_QTD = qtdNum;
     const saved = await base44.entities.Entrevista.create(payload);
     try { await base44.functions.invoke('enviarWebhookEntrevista', saved); } catch (e) { /* webhook failure não impede o salvamento */ }
     setSaving(false);
