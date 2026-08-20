@@ -67,7 +67,23 @@ export default function Home() {
       return next;
     });
   };
-  const submit = async (event) => { event.preventDefault(); setSaving(true); const saved = await base44.entities.Entrevista.create(data); try { await base44.functions.invoke('enviarWebhookEntrevista', saved); } catch (e) { /* webhook failure não impede o salvamento */ } setSaving(false); setSaved(true); window.scrollTo({ top: 0, behavior: "smooth" }); };
+  // SALARIOS_ABERTO_QTD é o único campo numérico do schema. O formulário
+  // controla ele como string (input type=number devolve string), e enviar ""
+  // ou "2" para um campo number faz a validação do backend rejeitar o create
+  // com 400 — era isso que impedia o salvamento. Normalizamos antes de salvar.
+  const submit = async (event) => {
+    event.preventDefault();
+    setSaving(true);
+    const payload = { ...data };
+    const qtd = payload.SALARIOS_ABERTO_QTD;
+    if (qtd === "" || qtd === null || qtd === undefined) delete payload.SALARIOS_ABERTO_QTD;
+    else payload.SALARIOS_ABERTO_QTD = Number(qtd);
+    const saved = await base44.entities.Entrevista.create(payload);
+    try { await base44.functions.invoke('enviarWebhookEntrevista', saved); } catch (e) { /* webhook failure não impede o salvamento */ }
+    setSaving(false);
+    setSaved(true);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   return <main className="min-h-screen pb-20 text-slate-950"><header className="border-b border-slate-200 bg-white"><div className="absolute left-4 top-4 z-10 sm:left-6"><Image src="https://media.base44.com/images/public/6a734d6c72c1f853994b8733/0dbb0b8f0_image.png" alt="Fernando Vieira Advogados" className="h-12 w-40 sm:h-16 sm:w-56" fittingType="fit" /></div><div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 sm:py-12"><p className="mb-2 text-sm font-bold uppercase tracking-widest text-brand">Entrevista trabalhista</p><h1 className="max-w-2xl text-3xl font-bold tracking-tight sm:text-4xl">Formulário de atendimento ao cliente</h1><p className="mt-3 max-w-2xl text-slate-600">Preencha os dados do atendimento. O salário-base e a existência de tomadora (2ª reclamada) definem, respectivamente, os valores do rol de pedidos e a comarca — confira os dois antes de salvar.</p>{saved && <div className="mt-6 flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-800"><CheckCircle2 className="h-5 w-5" />Entrevista salva com sucesso.</div>}</div></header>
     <form onSubmit={submit} className="mx-auto mt-6 max-w-4xl space-y-5 px-4 sm:px-6">
