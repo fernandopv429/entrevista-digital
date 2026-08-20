@@ -40,14 +40,54 @@ const DEPENDENTES = {
   tem_periculosidade: ['periculosidade_porcentagem'],
 };
 
+// "Contrato em vigor" NÃO é campo da entidade, de propósito: o evento enviado
+// ao n8n precisa manter exatamente a mesma estrutura que ele já consome, então
+// nenhuma chave nova entra no payload. A resposta vive só no estado do
+// formulário e chega ao gerador como frase nos fatos narrados — o campo por
+// onde ele já lê a narrativa.
+//
+// Sem isso, DATA_RESCISAO vazio era indistinguível de campo esquecido, e nas
+// rescisões indiretas em que o cliente segue trabalhando esse é o caso normal.
+const AVISO_EM_VIGOR = "Contrato de trabalho EM VIGOR na data desta entrevista — não há data de rescisão nem último dia trabalhado. As verbas rescisórias devem ser apuradas a partir da data que o juízo fixar para a rescisão do contrato.";
+
+// Ao abrir um registro já salvo para edição, a resposta é reconstituída: sem
+// data de rescisão e com a marca nos fatos narrados, o contrato estava ativo.
+// Sem isso o toggle voltaria em branco e o aviso se perderia no primeiro
+// "Salvar e reenviar".
+const inferirEmVigor = (d) => {
+  if (!d) return undefined;
+  if (d.DATA_RESCISAO) return false;
+  if ((d.fatos_narrados || "").includes("EM VIGOR")) return true;
+  return undefined;
+};
+
+// A frase é aplicada no submit e no PDF, nunca no textarea: assim não duplica
+// se o entrevistador alternar a resposta nem se o registro for reeditado.
+const comAvisoEmVigor = (d, emVigor) => {
+  if (emVigor !== true) return { ...d };
+  const base = (d.fatos_narrados || "").trim();
+  if (base.includes("EM VIGOR")) return { ...d };
+  return { ...d, fatos_narrados: base ? `${base}\n\n${AVISO_EM_VIGOR}` : AVISO_EM_VIGOR };
+};
+
 export default function EntrevistaForm({ initialData, onSubmit, submitLabel = "Salvar entrevista", savedLabel = "Entrevista salva com sucesso.", listenExample = false }) {
   const [data, setData] = useState(initialData);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [emVigor, setEmVigor] = useState(() => inferirEmVigor(initialData));
 
   const change = ({ target }) => { setSaved(false); setData(v => ({ ...v, [target.name]: target.value })); };
   // Dados fictícios para testar o fluxo sem usar o cadastro de um cliente real.
-  const carregarExemplo = () => { setSaved(false); setData(interviewExample); };
+  const carregarExemplo = () => { setSaved(false); setEmVigor(inferirEmVigor(interviewExample)); setData(interviewExample); };
+
+  const escolherEmVigor = (valor) => {
+    setSaved(false);
+    setEmVigor(valor);
+    // Com o contrato ativo as duas datas de saída não existem: precisam ser
+    // APAGADAS, não só escondidas — um valor digitado antes continuaria
+    // viajando no payload, fora da tela.
+    if (valor === true) setData(v => ({ ...v, DATA_RESCISAO: "", ULTIMO_DIA_TRABALHADO: "" }));
+  };
   // Permite disparar o "Carregar exemplo" a partir do menu (Sidebar), que
   // emite o evento window abaixo. Assim o botão sai do cabeçalho sem perder
   // a funcionalidade de pré-preencher com dados fictícios.
@@ -76,7 +116,7 @@ export default function EntrevistaForm({ initialData, onSubmit, submitLabel = "S
   const submit = async (event) => {
     event.preventDefault();
     setSaving(true);
-    const payload = { ...data };
+    const payload = comAvisoEmVigor(data, emVigor);
     const qtd = payload.SALARIOS_ABERTO_QTD;
     const qtdNum = Number(qtd);
     if (qtd === "" || qtd === null || qtd === undefined || !Number.isFinite(qtdNum)) delete payload.SALARIOS_ABERTO_QTD;
@@ -95,8 +135,8 @@ export default function EntrevistaForm({ initialData, onSubmit, submitLabel = "S
     <AvisoEstimativa />
     <IdentificationSection data={data} onChange={change} />
     <ReclamadasSection data={data} onChange={change} />
-    <PeriodoSection data={data} onChange={change} />
-    <DispensaSection data={data} onChange={change} />
+    <PeriodoSection data={data} onChange={change} emVigor={emVigor} onEmVigor={escolherEmVigor} />
+    <DispensaSection data={data} onChange={change} emVigor={emVigor} />
     <JornadaSection data={data} onChoice={choice} />
     <BeneficiosSection data={data} onChange={change} onChoice={choice} />
     <FeriasSection data={data} onChange={change} onChoice={choice} />
@@ -111,6 +151,6 @@ export default function EntrevistaForm({ initialData, onSubmit, submitLabel = "S
     <SaudeSection data={data} onChange={change} onChoice={choice} />
     <TestemunhaSection data={data} onChange={change} />
     <FactsSection data={data} onChange={change} />
-    <div className="sticky bottom-4 z-10 flex flex-wrap justify-end gap-3 rounded-2xl border border-slate-200 bg-white/95 p-3 shadow-xl backdrop-blur"><button type="button" onClick={() => generateInterviewPdf(data)} className="flex w-full items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-6 py-3.5 font-bold text-slate-700 transition hover:bg-slate-50 sm:w-auto"><Download className="h-5 w-5" />Baixar PDF</button><button type="submit" disabled={saving} className="flex w-full items-center justify-center gap-2 rounded-xl bg-brand px-6 py-3.5 font-bold text-white transition hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto">{saving ? <Loader2 className="h-5 w-5 animate-spin" /> : <CheckCircle2 className="h-5 w-5" />}{saving ? "Salvando..." : submitLabel}</button></div>
+    <div className="sticky bottom-4 z-10 flex flex-wrap justify-end gap-3 rounded-2xl border border-slate-200 bg-white/95 p-3 shadow-xl backdrop-blur"><button type="button" onClick={() => generateInterviewPdf(comAvisoEmVigor(data, emVigor))} className="flex w-full items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-6 py-3.5 font-bold text-slate-700 transition hover:bg-slate-50 sm:w-auto"><Download className="h-5 w-5" />Baixar PDF</button><button type="submit" disabled={saving} className="flex w-full items-center justify-center gap-2 rounded-xl bg-brand px-6 py-3.5 font-bold text-white transition hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto">{saving ? <Loader2 className="h-5 w-5 animate-spin" /> : <CheckCircle2 className="h-5 w-5" />}{saving ? "Salvando..." : submitLabel}</button></div>
   </form>;
 }
