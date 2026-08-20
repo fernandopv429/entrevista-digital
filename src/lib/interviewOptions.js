@@ -6,9 +6,58 @@ export const TIPO_DISPENSA_OPTIONS = [
   { value: "reversao_justa_causa", label: "Justa causa (a reverter)" },
 ];
 export const GRAU_INSALUBRIDADE_OPTIONS = ["mínimo", "médio", "máximo"];
-export const HORAS_EXTRAS_OPTIONS = ["Não realizava", "Até 1 hora", "1 a 2 horas", "2 a 3 horas", "Mais de 3 horas"];
-export const MINUTOS_OPTIONS = ["0 minutos", "15 minutos", "30 minutos", "45 minutos", "1 hora"];
+
+// Valores em minutos vieram antes das faixas porque as respostas reais chegam
+// em minutos ("40 min", "45 min", "1h20") e eram obrigadas a cair na faixa
+// larga, o que arredondava o pedido para baixo.
+//
+// As FAIXAS originais foram mantidas com o MESMO value: o gerador no n8n já as
+// reconhece e os registros salvos apontam para elas — trocar o texto faria o
+// select abrir vazio na tela de edição. Só o rótulo ganhou a marca "Faixa:",
+// para o entrevistador preferir o valor exato quando souber.
+export const HORAS_EXTRAS_OPTIONS = [
+  "Não realizava",
+  "15 minutos",
+  "20 minutos",
+  "30 minutos",
+  "40 minutos",
+  "45 minutos",
+  "1 hora",
+  "1 hora e 20 minutos",
+  "1 hora e 30 minutos",
+  { value: "Até 1 hora", label: "Faixa: até 1 hora" },
+  { value: "1 a 2 horas", label: "Faixa: 1 a 2 horas" },
+  { value: "2 a 3 horas", label: "Faixa: 2 a 3 horas" },
+  { value: "Mais de 3 horas", label: "Faixa: mais de 3 horas" },
+];
+
+// Grade de 5 em 5 minutos. A lista antiga só tinha 0/15/30/45/1h, e "20 min"
+// apareceu em duas entrevistas seguidas sem ter onde ser registrado — o
+// entrevistador tinha que escolher entre 15 (subdimensiona) e 30 (infla). O
+// passo de 5 minutos acompanha a tolerância do art. 58, § 1º, da CLT.
+export const MINUTOS_OPTIONS = [
+  "0 minutos",
+  "5 minutos",
+  "10 minutos",
+  "15 minutos",
+  "20 minutos",
+  "25 minutos",
+  "30 minutos",
+  "35 minutos",
+  "40 minutos",
+  "45 minutos",
+  "50 minutos",
+  "55 minutos",
+  "1 hora",
+  "1 hora e 30 minutos",
+  "2 horas",
+];
+
 export const FERIAS_OPTIONS = ["Não possuiu", "Proporcional", "1 período integral", "2 períodos integrais", "3 ou mais períodos"];
+
+// "4 a 5" existe porque foi resposta real de entrevista e não tinha faixa
+// correspondente: sem ela o valor ficava fora da lista e o select abria vazio
+// ao reabrir o registro para edição.
 export const FOLGAS_OPTIONS = ["0", "1 a 2", "3 a 4", "4 a 5", "5 a 6", "Mais de 6"];
 // Quando a resposta e "trabalhou folgas = Sim", "0" e contraditorio e fica fora.
 export const FOLGAS_OPTIONS_ATIVO = FOLGAS_OPTIONS.filter((o) => o !== "0");
