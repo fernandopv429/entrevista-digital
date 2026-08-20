@@ -3,24 +3,11 @@ import SectionCard from "@/components/form/SectionCard";
 import { Field, Select } from "@/components/form/FormFields";
 import { ESCALA_OPTIONS } from "@/lib/interviewOptions";
 
-// Cada reclamada agora tem: razão social, CNPJ, endereço, complemento, CEP,
-// tempo laborado e escala/horário. A 4ª reclamada foi adicionada (modelo .docx).
-export default function ReclamadasSection({ data, onChange }) {
-  const [show2, setShow2] = useState(!!data.RECL2_NOME);
-  const [show3, setShow3] = useState(!!data.RECL3_NOME);
-  const [show4, setShow4] = useState(!!data.RECL4_NOME);
-
-  // "Remover" precisa APAGAR os campos, não só escondê-los: o payload leva o
-  // objeto inteiro, então uma reclamada oculta continuava sendo enviada.
-  const CAMPOS = ["NOME", "CNPJ", "LOGRADOURO", "ENDCOMPL", "CEP", "TEMPO_LABORADO", "ESCALA_HORARIO"];
-  const limpar = (prefixo) => {
-    for (const campo of CAMPOS) onChange({ target: { name: `${prefixo}_${campo}`, value: "" } });
-  };
-  const remover2 = () => { limpar("RECL2"); limpar("RECL3"); limpar("RECL4"); setShow4(false); setShow3(false); setShow2(false); };
-  const remover3 = () => { limpar("RECL3"); limpar("RECL4"); setShow4(false); setShow3(false); };
-  const remover4 = () => { limpar("RECL4"); setShow4(false); };
-
-  const Bloco = ({ prefixo, rotulo, onRemover }) => (
+// Bloco precisa viver FORA do componente. Declarado dentro de
+// ReclamadasSection, ele é recriado a cada render e o React desmonta/remonta
+// os inputs a cada tecla — o que derruba o foco e "buga" a digitação.
+function BlocoReclamada({ data, onChange, prefixo, rotulo, onRemover }) {
+  return (
     <div className="rounded-xl border border-slate-200 bg-slate-50 p-5">
       <div className="mb-4 flex items-center justify-between">
         <span className="text-xs font-bold uppercase tracking-widest text-blue-700">{rotulo}</span>
@@ -37,6 +24,22 @@ export default function ReclamadasSection({ data, onChange }) {
       </div>
     </div>
   );
+}
+
+export default function ReclamadasSection({ data, onChange }) {
+  const [show2, setShow2] = useState(!!data.RECL2_NOME);
+  const [show3, setShow3] = useState(!!data.RECL3_NOME);
+  const [show4, setShow4] = useState(!!data.RECL4_NOME);
+
+  // "Remover" precisa APAGAR os campos, não só escondê-los: o payload leva o
+  // objeto inteiro, então uma reclamada oculta continuava sendo enviada.
+  const CAMPOS = ["NOME", "CNPJ", "LOGRADOURO", "ENDCOMPL", "CEP", "TEMPO_LABORADO", "ESCALA_HORARIO"];
+  const limpar = (prefixo) => {
+    for (const campo of CAMPOS) onChange({ target: { name: `${prefixo}_${campo}`, value: "" } });
+  };
+  const remover2 = () => { limpar("RECL2"); limpar("RECL3"); limpar("RECL4"); setShow4(false); setShow3(false); setShow2(false); };
+  const remover3 = () => { limpar("RECL3"); limpar("RECL4"); setShow4(false); setShow3(false); };
+  const remover4 = () => { limpar("RECL4"); setShow4(false); };
 
   return <SectionCard number="2" title="Reclamadas, função e jornada"><div className="space-y-6">
     <div className="grid gap-5 sm:grid-cols-3">
@@ -45,19 +48,19 @@ export default function ReclamadasSection({ data, onChange }) {
       <Field label="Horário da jornada (geral)" name="JORNADA_HORARIO" value={data.JORNADA_HORARIO} onChange={onChange} placeholder="Ex.: das 19h às 07h" />
     </div>
 
-    <Bloco prefixo="RECL1" rotulo="1ª Reclamada (empregadora)" />
+    <BlocoReclamada data={data} onChange={onChange} prefixo="RECL1" rotulo="1ª Reclamada (empregadora)" />
 
-    {show2 && <Bloco prefixo="RECL2" rotulo="2ª Reclamada (tomadora)" onRemover={remover2} />}
+    {show2 && <BlocoReclamada data={data} onChange={onChange} prefixo="RECL2" rotulo="2ª Reclamada (tomadora)" onRemover={remover2} />}
     {!show2 && (
       <button type="button" onClick={() => setShow2(true)} className="w-full rounded-xl border-2 border-dashed border-slate-300 px-4 py-3 font-semibold text-slate-600 transition hover:border-blue-700 hover:text-blue-700">+ Adicionar 2ª reclamada</button>
     )}
 
-    {show2 && show3 && <Bloco prefixo="RECL3" rotulo="3ª Reclamada (tomadora)" onRemover={remover3} />}
+    {show2 && show3 && <BlocoReclamada data={data} onChange={onChange} prefixo="RECL3" rotulo="3ª Reclamada (tomadora)" onRemover={remover3} />}
     {show2 && !show3 && (
       <button type="button" onClick={() => setShow3(true)} className="w-full rounded-xl border-2 border-dashed border-slate-300 px-4 py-3 font-semibold text-slate-600 transition hover:border-blue-700 hover:text-blue-700">+ Adicionar 3ª reclamada</button>
     )}
 
-    {show2 && show3 && show4 && <Bloco prefixo="RECL4" rotulo="4ª Reclamada (tomadora)" onRemover={remover4} />}
+    {show2 && show3 && show4 && <BlocoReclamada data={data} onChange={onChange} prefixo="RECL4" rotulo="4ª Reclamada (tomadora)" onRemover={remover4} />}
     {show2 && show3 && !show4 && (
       <button type="button" onClick={() => setShow4(true)} className="w-full rounded-xl border-2 border-dashed border-slate-300 px-4 py-3 font-semibold text-slate-600 transition hover:border-blue-700 hover:text-blue-700">+ Adicionar 4ª reclamada</button>
     )}
