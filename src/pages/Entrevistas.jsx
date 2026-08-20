@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { FileText, Loader2, Building2, CalendarDays, Send, CheckCircle2, AlertCircle, Download, Pencil } from "lucide-react";
+import { FileText, Loader2, Building2, CalendarDays, Send, CheckCircle2, AlertCircle, Download, Pencil, Trash2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { TIPO_DISPENSA_OPTIONS } from "@/lib/interviewOptions";
 import { generateInterviewPdf } from "@/lib/interviewPdf";
@@ -21,6 +21,7 @@ export default function Entrevistas() {
   const [error, setError] = useState(null);
   const [resending, setResending] = useState({});
   const [resendResult, setResendResult] = useState({});
+  const [deleting, setDeleting] = useState({});
 
   useEffect(() => {
     let active = true;
@@ -40,6 +41,19 @@ export default function Entrevistas() {
       setResendResult(r => ({ ...r, [item.id]: { ok: false, msg: e.message } }));
     } finally {
       setResending(r => { const n = { ...r }; delete n[item.id]; return n; });
+    }
+  };
+
+  const remove = async (item) => {
+    if (!window.confirm(`Excluir a entrevista de "${item.RECL_NOME || "Sem nome"}"? Esta ação não pode ser desfeita.`)) return;
+    setDeleting(r => ({ ...r, [item.id]: true }));
+    try {
+      await base44.entities.Entrevista.delete(item.id);
+      setEntrevistas(list => (list || []).filter(e => e.id !== item.id));
+    } catch (e) {
+      window.alert(`Erro ao excluir: ${e.message}`);
+    } finally {
+      setDeleting(r => { const n = { ...r }; delete n[item.id]; return n; });
     }
   };
 
@@ -113,6 +127,10 @@ export default function Entrevistas() {
             </button>
             {resendResult[item.id]?.ok && <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-emerald-700"><CheckCircle2 className="h-4 w-4" />Evento reenviado</span>}
             {resendResult[item.id] && !resendResult[item.id].ok && <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-rose-700"><AlertCircle className="h-4 w-4" />Falha: {resendResult[item.id].msg}</span>}
+            <button type="button" onClick={() => remove(item)} disabled={!!deleting[item.id]} className="ml-auto inline-flex items-center gap-2 rounded-xl border border-rose-200 bg-white px-4 py-2 text-sm font-bold text-rose-700 transition hover:bg-rose-50 disabled:cursor-not-allowed disabled:opacity-60">
+              {deleting[item.id] ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
+              {deleting[item.id] ? "Excluindo..." : "Excluir"}
+            </button>
           </div>
         </article>
         );
