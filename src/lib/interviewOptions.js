@@ -55,10 +55,12 @@ export const MINUTOS_OPTIONS = [
 
 export const FERIAS_OPTIONS = ["Não possuiu", "Proporcional", "1 período integral", "2 períodos integrais", "3 ou mais períodos"];
 
-// "4 a 5" existe porque foi resposta real de entrevista e não tinha faixa
-// correspondente: sem ela o valor ficava fora da lista e o select abria vazio
-// ao reabrir o registro para edição.
-export const FOLGAS_OPTIONS = ["0", "1 a 2", "3 a 4", "4 a 5", "5 a 6", "Mais de 6"];
+// "4 a 5" e "5 a 7" existem porque foram respostas reais e não tinham faixa
+// correspondente: sem elas o valor fica fora da lista e o select abre vazio ao
+// reabrir o registro para edição — e um "salvar" apagaria o dado. "5 a 7" veio
+// da peça redigida pela especialista, que apurou faixa maior que a anotada na
+// entrevista assinada.
+export const FOLGAS_OPTIONS = ["0", "1 a 2", "3 a 4", "4 a 5", "5 a 6", "5 a 7", "Mais de 6"];
 // Quando a resposta e "trabalhou folgas = Sim", "0" e contraditorio e fica fora.
 export const FOLGAS_OPTIONS_ATIVO = FOLGAS_OPTIONS.filter((o) => o !== "0");
 // O gerador liga a tese de integracao do pagamento "por fora" quando a forma de
