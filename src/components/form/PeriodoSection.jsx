@@ -17,7 +17,7 @@ export default function PeriodoSection({ data, onChange, emVigor, onEmVigor }) {
   const FIELDS = ativo
     ? ["DATA_ADMISSAO", "SALARIO"]
     : ["DATA_ADMISSAO", "DATA_RESCISAO", "SALARIO"];
-  return <SectionCard number="3" title="Tempo laborado e remuneração" incomplete={hasEmpty(data, FIELDS)}><div className="space-y-5">
+  return <SectionCard number="3" title="Período do contrato e remuneração" incomplete={hasEmpty(data, FIELDS)}><div className="space-y-5">
     <YesNo label="Contrato ainda em vigor?" name="contrato_em_vigor" value={emVigor} onChange={(_, valor) => onEmVigor(valor)} />
     <div className="grid gap-5 sm:grid-cols-2">
       <Field label="Admissão" name="DATA_ADMISSAO" type="date" value={data.DATA_ADMISSAO} onChange={onChange} />
