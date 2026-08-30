@@ -63,9 +63,9 @@ export async function generateInterviewPdf(data) {
   const writeText = (text, x, startY, maxW, opts = {}) => {
     const lines = doc.splitTextToSize(String(text), maxW);
     lines.forEach((line, i) => {
-      doc.text(line, x, startY + i * 13, opts);
+      doc.text(line, x, startY + i * 15, opts);
     });
-    return startY + lines.length * 13;
+    return startY + lines.length * 15;
   };
 
   // ── CABEÇALHO ─────────────────────────────────────────────────────────────
@@ -83,7 +83,7 @@ export async function generateInterviewPdf(data) {
   // Título "(ENTREVISTA)" centralizado e negrito
   setBold(); doc.setFontSize(11);
   doc.text("(ENTREVISTA)", pageW / 2, y, { align: "center" });
-  y += 24;
+  y += 30;
 
   // ── SEÇÃO: IDENTIFICAÇÃO DO CLIENTE ───────────────────────────────────────
   setTitle(); doc.setFontSize(12);
@@ -93,7 +93,7 @@ export async function generateInterviewPdf(data) {
   // sublinhado manual
   doc.setDrawColor(0); doc.setLineWidth(0.5);
   doc.line((pageW - titleW) / 2, y + 2, (pageW + titleW) / 2, y + 2);
-  y += 20;
+  y += 26;
 
   // Parágrafo corrido do cliente (estilo jurídico)
   const nome = (txt(data.RECL_NOME) || "").toUpperCase();
@@ -167,7 +167,7 @@ export async function generateInterviewPdf(data) {
   const titleRW = doc.getTextWidth(titleRecl);
   doc.text(titleRecl, pageW / 2, y, { align: "center" });
   doc.line((pageW - titleRW) / 2, y + 2, (pageW + titleRW) / 2, y + 2);
-  y += 20;
+  y += 24;
 
   RECLAMADAS.forEach((r) => {
     const hasData = data[r.nome] || data[r.cnpj];
@@ -180,7 +180,7 @@ export async function generateInterviewPdf(data) {
     doc.text(labelRecl, marginX, y);
     const lrW = doc.getTextWidth(labelRecl);
     doc.line(marginX, y + 2, marginX + lrW, y + 2);
-    y += 16;
+    y += 20;
 
     // Campos em bloco estilo formulário
     setBody();
