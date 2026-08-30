@@ -149,16 +149,16 @@ export async function generateInterviewPdf(data) {
     const npW = doc.getTextWidth(nomePart);
     setBody();
     doc.text(restPart, marginX + npW, y);
-    y += 13;
+    y += 15;
     for (let i = 1; i < linhas.length; i++) {
-      ensure(13);
+      ensure(15);
       doc.text(linhas[i], marginX, y);
-      y += 13;
+      y += 15;
     }
   } else {
     setBold(); y = writeText(paragrafoCompleto, marginX, y, contentW); setBody();
   }
-  y += 18;
+  y += 22;
 
   // ── SEÇÃO: IDENTIFICAÇÃO DO(S) RECLAMADO(S) ───────────────────────────────
   ensure(30);
@@ -194,7 +194,7 @@ export async function generateInterviewPdf(data) {
     ];
     campos.forEach(([label, val]) => {
       if (!val) return;
-      ensure(14);
+      ensure(16);
       const lbl = `${label}:  `;
       setBold();
       doc.text(lbl, marginX, y);
@@ -202,12 +202,12 @@ export async function generateInterviewPdf(data) {
       setBody();
       const lines2 = doc.splitTextToSize(val, contentW - lw2);
       doc.text(lines2[0], marginX + lw2, y);
-      y += 13;
+      y += 15;
       for (let i = 1; i < lines2.length; i++) {
-        ensure(13); doc.text(lines2[i], marginX + lw2, y); y += 13;
+        ensure(15); doc.text(lines2[i], marginX + lw2, y); y += 15;
       }
     });
-    y += 10;
+    y += 14;
   });
 
   // ── PÁGINA 2: SEÇÕES CHECKLIST ────────────────────────────────────────────
@@ -393,20 +393,20 @@ export async function generateInterviewPdf(data) {
     secs.forEach((sec, idx) => {
       // Número global baseado no offset
       const globalNum = (startX === col1X ? 0 : mid) + idx + 1;
-      cy += 2;
+      cy += 4;
       setBold(); doc.setFontSize(10);
       const titleText = `${globalNum}. ${sec.title}`;
       const titleLines = doc.splitTextToSize(titleText, colWidth);
-      titleLines.forEach(l => { doc.text(l, startX, cy); cy += 13; });
-      cy += 2;
+      titleLines.forEach(l => { doc.text(l, startX, cy); cy += 14; });
+      cy += 5;
       sec.items.forEach(item => {
         setBody(); doc.setFontSize(9.5);
         const ix = item.sub ? startX + 8 : startX;
         const iw = item.sub ? colWidth - 8 : colWidth;
         const lines = doc.splitTextToSize(item.text, iw);
-        lines.forEach(l => { doc.text(l, ix, cy); cy += 12; });
+        lines.forEach(l => { doc.text(l, ix, cy); cy += 14; });
       });
-      cy += 5;
+      cy += 10;
     });
     return cy;
   };
@@ -429,9 +429,9 @@ export async function generateInterviewPdf(data) {
     doc.line((pageW - tfW) / 2, y + 2, (pageW + tfW) / 2, y + 2);
     y += 22;
 
-    setBody(); doc.setFontSize(10);
+    setBody(); doc.setFontSize(11);
     const fatosLines = doc.splitTextToSize(txt(data.fatos_narrados), contentW);
-    fatosLines.forEach(l => { ensure(13); doc.text(l, marginX, y); y += 14; });
+    fatosLines.forEach(l => { ensure(18); doc.text(l, marginX, y); y += 18; });
   }
 
   // ── RODAPÉ ────────────────────────────────────────────────────────────────
