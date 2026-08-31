@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { FileText, Loader2, Building2, CalendarDays, Send, CheckCircle2, AlertCircle, Download, Pencil, Trash2 } from "lucide-react";
+import { FileText, Loader2, Building2, CalendarDays, Send, CheckCircle2, AlertCircle, Download, Pencil, Trash2, Search } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { TIPO_DISPENSA_OPTIONS } from "@/lib/interviewOptions";
 import { generateInterviewPdf } from "@/lib/interviewPdf";
@@ -22,6 +22,16 @@ export default function Entrevistas() {
   const [resending, setResending] = useState({});
   const [resendResult, setResendResult] = useState({});
   const [deleting, setDeleting] = useState({});
+  const [busca, setBusca] = useState("");
+
+  const termo = busca.trim().toLowerCase();
+  const filtradas = (entrevistas || []).filter(item => {
+    if (!termo) return true;
+    const nome = (item.RECL_NOME || "").toLowerCase();
+    const cpf = (item.RECL_CPF || "").toLowerCase();
+    const id = (item.id || "").toLowerCase();
+    return nome.includes(termo) || cpf.includes(termo) || id.includes(termo);
+  });
 
   useEffect(() => {
     let active = true;
@@ -66,6 +76,17 @@ export default function Entrevistas() {
     </header>
 
     <div className="mx-auto mt-6 max-w-4xl space-y-4 px-4 sm:px-6">
+      <div className="relative">
+        <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+        <input
+          type="text"
+          value={busca}
+          onChange={(e) => setBusca(e.target.value)}
+          placeholder="Pesquisar por nome, CPF ou ID..."
+          className="w-full rounded-2xl border border-slate-200 bg-white py-3 pl-11 pr-4 text-sm text-slate-900 outline-none transition focus:border-brand focus:ring-4 focus:ring-orange-100"
+        />
+      </div>
+
       {entrevistas === null && !error && (
         <div className="flex items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white p-12 text-slate-500"><Loader2 className="h-5 w-5 animate-spin" />Carregando entrevistas...</div>
       )}
@@ -79,7 +100,14 @@ export default function Entrevistas() {
           <p className="mt-1 text-sm text-slate-500">Use o menu para criar uma nova entrevista.</p>
         </div>
       )}
-      {entrevistas !== null && entrevistas.length > 0 && entrevistas.map(item => {
+      {entrevistas !== null && entrevistas.length > 0 && filtradas.length === 0 && (
+        <div className="rounded-2xl border border-slate-200 bg-white p-12 text-center">
+          <Search className="mx-auto mb-3 h-8 w-8 text-slate-300" />
+          <p className="font-semibold text-slate-700">Nenhuma entrevista encontrada.</p>
+          <p className="mt-1 text-sm text-slate-500">Tente outro termo de pesquisa.</p>
+        </div>
+      )}
+      {entrevistas !== null && filtradas.length > 0 && filtradas.map(item => {
         const reclamadas = [
           { razao_social: item.RECL1_NOME, cnpj: item.RECL1_CNPJ },
           { razao_social: item.RECL2_NOME, cnpj: item.RECL2_CNPJ },
