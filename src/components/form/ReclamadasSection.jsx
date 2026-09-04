@@ -3,6 +3,7 @@ import SectionCard from "@/components/form/SectionCard";
 import { Field, Select } from "@/components/form/FormFields";
 import { ESCALA_OPTIONS } from "@/lib/interviewOptions";
 import { hasEmpty } from "@/lib/sectionCompleteness";
+import CnpjSugestao from "@/components/form/CnpjSugestao";
 
 // Bloco precisa viver FORA do componente. Declarado dentro de
 // ReclamadasSection, ele é recriado a cada render e o React desmonta/remonta
@@ -16,6 +17,7 @@ function BlocoReclamada({ data, onChange, prefixo, rotulo, onRemover }) {
       </div>
       <div className="grid gap-5 sm:grid-cols-2">
         <div className="sm:col-span-2"><Field label="Razão social" name={`${prefixo}_NOME`} value={data[`${prefixo}_NOME`]} onChange={onChange} /></div>
+        <div className="sm:col-span-2"><CnpjSugestao prefixo={prefixo} nome={data[`${prefixo}_NOME`]} logradouro={data[`${prefixo}_LOGRADOURO`]} cep={data[`${prefixo}_CEP`]} compl={data[`${prefixo}_ENDCOMPL`]} onChange={onChange} /></div>
         <Field label="CNPJ" name={`${prefixo}_CNPJ`} value={data[`${prefixo}_CNPJ`]} onChange={onChange} format="cnpj" />
         <Field label="CEP" name={`${prefixo}_CEP`} value={data[`${prefixo}_CEP`]} onChange={onChange} format="cep" />
         <div className="sm:col-span-2"><Field label="Endereço (logradouro)" name={`${prefixo}_LOGRADOURO`} value={data[`${prefixo}_LOGRADOURO`]} onChange={onChange} /></div>
