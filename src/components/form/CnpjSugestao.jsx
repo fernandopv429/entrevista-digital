@@ -115,6 +115,7 @@ export default function CnpjSugestao({ prefixo, nome, logradouro, cep, compl }) 
               <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" /> Há mais de uma empresa compatível — confira os dados antes de confirmar o CNPJ correto.
             </div>
           )}
+          <div className="max-h-80 space-y-2 overflow-y-auto pr-1">
           {candidatos.map((c, i) => (
             <div key={c.cnpj} className={`rounded-xl border p-3 text-sm ${i === 0 ? "border-blue-300 bg-white" : "border-slate-200 bg-white"}`}>
               <div className="flex items-start gap-2">
@@ -143,6 +144,7 @@ export default function CnpjSugestao({ prefixo, nome, logradouro, cep, compl }) 
               </div>
             </div>
           ))}
+          </div>
           <p className="pt-1 text-xs leading-relaxed text-slate-500">
             Confirme se o CNPJ acima corresponde à empresa correta antes de preencher. Para garantir mais precisão, adicione mais dados como <b>endereço</b>, <b>CEP</b> e <b>cidade/UF</b>.
           </p>
