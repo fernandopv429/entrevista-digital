@@ -15,10 +15,15 @@ function normalizarTexto(s) {
 
 function termoBusca(razao) {
   let n = normalizarTexto(razao);
+  // "S.A" / "S/A" viram "S A" após a normalização (pontuação vira espaço).
+  // Reagrupa para "SA" antes de remover os sufixos, senão a busca exata
+  // por "... S A" não encontra a empresa correta.
+  n = n.replace(/\bS\s+A\b/g, "SA");
   for (const sufixo of SUFIXOS) {
     n = n.replace(new RegExp("\\b" + sufixo + "\\b", "g"), " ");
   }
-  return n.replace(/\s+/g, " ").trim();
+  // Descarta tokens isolados de 1 letra (ruído de abreviações tipo "S.A").
+  return n.split(" ").filter(w => w.length > 1).join(" ").replace(/\s+/g, " ").trim();
 }
 
 function normalizarCep(cep) {
