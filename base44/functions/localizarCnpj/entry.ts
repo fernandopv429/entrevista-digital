@@ -90,11 +90,11 @@ async function consultar(termo, municipio, uf, cep) {
       razao_social: true,
       nome_fantasia: true
     }],
-    municipio: [municipio],
-    uf: [uf],
     situacao_cadastral: ["ATIVA"],
     limite: 20
   };
+  if (municipio) body.municipio = [municipio];
+  if (uf) body.uf = [uf];
   if (cep) body.cep = [cep];
 
   const res = await fetch("https://api.casadosdados.com.br/v5/cnpj/pesquisa?tipo_resultado=completo", {
@@ -134,7 +134,6 @@ export default async function(req) {
     const cep = normalizarCep(payload.cep);
 
     if (!razao) return Response.json({ status: "error", mensagem: "razao_social é obrigatório" }, { status: 400 });
-    if (!municipio || !uf) return Response.json({ status: "error", mensagem: "municipio e uf são obrigatórios" }, { status: 400 });
 
     const termo = termoBusca(razao);
     if (!termo) return Response.json({ status: "empty", total: 0, candidatos: [], ambiguo: false });

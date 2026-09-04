@@ -41,9 +41,6 @@ export default function CnpjSugestao({ prefixo, nome, logradouro, cep, compl }) 
     const cepDig = (cep || "").replace(/\D/g, "");
 
     if (razao.length < 4) { setStatus("idle"); setCandidatos([]); return; }
-    if ((!municipio || !uf) && cepDig.length < 8) {
-      setStatus("falta"); setCandidatos([]); return;
-    }
     setStatus("loading"); setCandidatos([]); setAmbiguo(false); setErro(""); setExpandido(false);
     try {
       const res = await base44.functions.invoke("localizarCnpj", {
@@ -74,7 +71,7 @@ export default function CnpjSugestao({ prefixo, nome, logradouro, cep, compl }) 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chaveBusca, temNome]);
 
-  if (!temNome || fechado) return null;
+  if (!temNome || fechado || (status !== "loading" && status !== "success")) return null;
 
   return (
     <div className="rounded-2xl border border-blue-200 bg-blue-50/60 p-4">
