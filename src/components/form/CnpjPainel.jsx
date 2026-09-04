@@ -14,7 +14,7 @@ export default function CnpjPainel({ data }) {
   if (reclamadas.length === 0) return null;
 
   return (
-    <aside className="space-y-3">
+    <aside className="space-y-3 rounded-2xl bg-white/95 p-3 shadow-xl ring-1 ring-slate-200 backdrop-blur xl:max-h-[calc(100vh-7rem)] xl:overflow-y-auto">
       {reclamadas.map(r => (
         <CnpjSugestao key={r.prefixo} prefixo={r.prefixo} nome={r.nome} logradouro={r.logradouro} cep={r.cep} compl={r.compl} />
       ))}

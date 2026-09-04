@@ -141,7 +141,7 @@ export default function EntrevistaForm({ initialData, onSubmit, submitLabel = "S
 ...
         <FactsSection data={data} onChange={change} />
       </div>
-      <div className="xl:sticky xl:top-6"><CnpjPainel data={data} /></div>
+      <div className="xl:fixed xl:right-6 xl:top-24 xl:z-30 xl:w-[340px]"><CnpjPainel data={data} /></div>
     </div>
     <div className="sticky bottom-4 z-10 flex flex-wrap justify-end gap-3 rounded-2xl border border-slate-200 bg-white/95 p-3 shadow-xl backdrop-blur"><button type="button" onClick={() => generateInterviewPdf(comAvisoEmVigor(data, emVigor))} className="flex w-full items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-6 py-3.5 font-bold text-slate-700 transition hover:bg-slate-50 sm:w-auto"><Download className="h-5 w-5" />Baixar PDF</button><button type="submit" disabled={saving} className="flex w-full items-center justify-center gap-2 rounded-xl bg-brand px-6 py-3.5 font-bold text-white transition hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto">{saving ? <Loader2 className="h-5 w-5 animate-spin" /> : <CheckCircle2 className="h-5 w-5" />}{saving ? "Salvando..." : submitLabel}</button></div>
   </form>;
