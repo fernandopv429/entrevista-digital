@@ -21,6 +21,7 @@ import DescontosSection from "@/components/form/DescontosSection";
 import SaudeSection from "@/components/form/SaudeSection";
 import TestemunhaSection from "@/components/form/TestemunhaSection";
 import FactsSection from "@/components/form/FactsSection";
+import CnpjPainel from "@/components/form/CnpjPainel";
 
 // Campos que só existem enquanto a tese está ativa. Ao responder "Não" depois
 // de ter preenchido, o valor precisa ser APAGADO: o payload leva o objeto
@@ -130,27 +131,18 @@ export default function EntrevistaForm({ initialData, onSubmit, submitLabel = "S
     }
   };
 
-  return <form onSubmit={submit} className="mx-auto mt-6 max-w-4xl space-y-5 px-4 sm:px-6">
+  return <form onSubmit={submit} className="mx-auto mt-6 max-w-4xl px-4 sm:px-6 xl:max-w-6xl">
     {saved && <div className="flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-800"><CheckCircle2 className="h-5 w-5" />{savedLabel}</div>}
     <AvisoEstimativa />
-    <IdentificationSection data={data} onChange={change} />
-    <ReclamadasSection data={data} onChange={change} />
-    <PeriodoSection data={data} onChange={change} emVigor={emVigor} onEmVigor={escolherEmVigor} />
-    <DispensaSection data={data} onChange={change} emVigor={emVigor} />
-    <JornadaSection data={data} onChoice={choice} />
-    <BeneficiosSection data={data} onChange={change} onChoice={choice} />
-    <FeriasSection data={data} onChange={change} onChoice={choice} />
-    <FolgasSection data={data} onChange={change} onChoice={choice} />
-    <IntervaloSection data={data} onChange={change} onChoice={choice} />
-    <HorasExtrasSection data={data} onChange={change} onChoice={choice} />
-    <AcumuloSection data={data} onChange={change} onChoice={choice} />
-    <CondicoesSection data={data} onChoice={choice} />
-    <GratificacoesSection data={data} onChange={change} onChoice={choice} />
-    <DocumentosSection data={data} onChoice={choice} />
-    <DescontosSection data={data} onChange={change} onChoice={choice} />
-    <SaudeSection data={data} onChange={change} onChoice={choice} />
-    <TestemunhaSection data={data} onChange={change} />
-    <FactsSection data={data} onChange={change} />
+    <div className="xl:grid xl:grid-cols-[minmax(0,1fr)_340px] xl:gap-6 xl:items-start">
+      <div className="space-y-5">
+        <IdentificationSection data={data} onChange={change} />
+        <ReclamadasSection data={data} onChange={change} />
+...
+        <FactsSection data={data} onChange={change} />
+      </div>
+      <div className="xl:sticky xl:top-6"><CnpjPainel data={data} /></div>
+    </div>
     <div className="sticky bottom-4 z-10 flex flex-wrap justify-end gap-3 rounded-2xl border border-slate-200 bg-white/95 p-3 shadow-xl backdrop-blur"><button type="button" onClick={() => generateInterviewPdf(comAvisoEmVigor(data, emVigor))} className="flex w-full items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-6 py-3.5 font-bold text-slate-700 transition hover:bg-slate-50 sm:w-auto"><Download className="h-5 w-5" />Baixar PDF</button><button type="submit" disabled={saving} className="flex w-full items-center justify-center gap-2 rounded-xl bg-brand px-6 py-3.5 font-bold text-white transition hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto">{saving ? <Loader2 className="h-5 w-5 animate-spin" /> : <CheckCircle2 className="h-5 w-5" />}{saving ? "Salvando..." : submitLabel}</button></div>
   </form>;
 }
