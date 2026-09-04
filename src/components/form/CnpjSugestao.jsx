@@ -41,9 +41,6 @@ export default function CnpjSugestao({ prefixo, nome, logradouro, cep, compl }) 
     const cepDig = (cep || "").replace(/\D/g, "");
 
     if (razao.length < 4) { setStatus("idle"); setCandidatos([]); return; }
-    // A razão social sozinha não basta: uma empresa pode ter vários CNPJs.
-    // Só buscamos quando há cidade/UF (complemento) para desambiguar.
-    if (!municipio || !uf) { setStatus("idle"); setCandidatos([]); return; }
     setStatus("loading"); setCandidatos([]); setAmbiguo(false); setErro(""); setExpandido(false);
     try {
       const res = await base44.functions.invoke("localizarCnpj", {

@@ -134,7 +134,6 @@ export default async function(req) {
     const cep = normalizarCep(payload.cep);
 
     if (!razao) return Response.json({ status: "error", mensagem: "razao_social é obrigatório" }, { status: 400 });
-    if (!municipio || !uf) return Response.json({ status: "falta", mensagem: "Informe cidade/UF no complemento para localizar o CNPJ correto." });
 
     const termo = termoBusca(razao);
     if (!termo) return Response.json({ status: "empty", total: 0, candidatos: [], ambiguo: false });
