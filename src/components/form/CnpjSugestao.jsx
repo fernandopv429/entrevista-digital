@@ -29,6 +29,7 @@ export default function CnpjSugestao({ prefixo, nome, logradouro, cep, compl }) 
   const [erro, setErro] = useState("");
   const [expandido, setExpandido] = useState(false);
   const [fechado, setFechado] = useState(false);
+  const [debug, setDebug] = useState("");
   const timer = useRef(null);
   const ultimaChave = useRef("");
 
@@ -54,6 +55,8 @@ export default function CnpjSugestao({ prefixo, nome, logradouro, cep, compl }) 
       });
       let data = res.data || res;
       if (typeof data?.json === "function") data = await data.json();
+      const dKeys = data ? Object.keys(data).join(",") : "null";
+      setDebug("keys=" + dKeys + " status=" + data?.status + " cands=" + (data?.candidatos?.length ?? "undef"));
       if (data.status === "error") {
         setStatus("error"); setErro(data.mensagem || "Falha na consulta"); return;
       }
@@ -104,9 +107,12 @@ export default function CnpjSugestao({ prefixo, nome, logradouro, cep, compl }) 
       )}
 
       {status === "empty" && (
-        <p className="text-sm leading-relaxed text-slate-700">
-          Nenhum CNPJ encontrado com essa razão social. Confira a grafia ou adicione mais dados (endereço, CEP, cidade/UF) para refinar a busca.
-        </p>
+        <div>
+          <p className="text-sm leading-relaxed text-slate-700">
+            Nenhum CNPJ encontrado com essa razão social. Confira a grafia ou adicione mais dados (endereço, CEP, cidade/UF) para refinar a busca.
+          </p>
+          {debug && <p className="mt-2 text-xs text-slate-400">DEBUG: {debug}</p>}
+        </div>
       )}
 
       {status === "error" && (
