@@ -46,17 +46,12 @@ export default function CnpjSugestao({ prefixo, nome, logradouro, cep, compl }) 
     if (!podeBuscar) { setStatus("idle"); setCandidatos([]); return; }
     setStatus("loading"); setCandidatos([]); setAmbiguo(false); setErro(""); setExpandido(false);
     try {
-      const res = await base44.functions.invoke("localizarCnpj", {
-        razao_social: razao,
-        endereco: logradouro || "",
-        municipio: complMun || "",
-        uf: complUf || "",
-        cep: cep || ""
-      });
+      const params = { razao_social: razao, endereco: logradouro || "", municipio: complMun || "", uf: complUf || "", cep: cep || "" };
+      const res = await base44.functions.invoke("localizarCnpj", params);
       let data = res.data || res;
       if (typeof data?.json === "function") data = await data.json();
       const dKeys = data ? Object.keys(data).join(",") : "null";
-      setDebug("keys=" + dKeys + " status=" + data?.status + " cands=" + (data?.candidatos?.length ?? "undef"));
+      setDebug("busca=" + razao.substring(0, 30) + " | keys=" + dKeys + " status=" + data?.status + " cands=" + (data?.candidatos?.length ?? "undef"));
       if (data.status === "error") {
         setStatus("error"); setErro(data.mensagem || "Falha na consulta"); return;
       }
@@ -64,6 +59,9 @@ export default function CnpjSugestao({ prefixo, nome, logradouro, cep, compl }) 
       if (!cands.length) { setStatus("empty"); return; }
       setCandidatos(cands); setAmbiguo(!!data.ambiguo); setStatus("success");
     } catch (e) {
+      const errData = e?.response?.data;
+      const errKeys = errData ? Object.keys(errData).join(",") : "none";
+      setDebug("erro catch: " + (e.message || "?") + " | errDataKeys=" + errKeys + " | errStatus=" + e?.response?.status);
       setStatus("error"); setErro(e.message || "Erro ao consultar");
     }
   };
@@ -116,7 +114,10 @@ export default function CnpjSugestao({ prefixo, nome, logradouro, cep, compl }) 
       )}
 
       {status === "error" && (
-        <p className="text-sm font-semibold text-rose-700">Falha ao consultar: {erro}</p>
+        <div>
+          <p className="text-sm font-semibold text-rose-700">Falha ao consultar: {erro}</p>
+          {debug && <p className="mt-2 text-xs text-slate-400">DEBUG: {debug}</p>}
+        </div>
       )}
 
       {status === "success" && (

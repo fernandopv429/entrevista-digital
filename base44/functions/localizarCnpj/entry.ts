@@ -210,7 +210,7 @@ export default async function(req) {
         razao_social: item.razao_social,
         nome_fantasia: item.nome_fantasia,
         matriz_filial: matrizFilialTexto(item.matriz_filial),
-        situacao: item.situacao_cadastral?.situacao_atual || "—",
+        situacao: item.situacao_cadastral?.situacao_cadastral || item.situacao_cadastral?.situacao_atual || "—",
         cnae_principal: item.atividade_principal || { codigo: "", descricao: "" },
         cnaes_secundarios: cnaeSec,
         qtd_cnae_secundario: cnaeSec.length,
