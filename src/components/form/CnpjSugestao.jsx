@@ -32,22 +32,24 @@ export default function CnpjSugestao({ prefixo, nome, logradouro, cep, compl }) 
   const timer = useRef(null);
   const ultimaChave = useRef("");
 
-  const chaveBusca = `${nome || ""}|${logradouro || ""}|${cep || ""}|${compl || ""}`;
+  const { municipio: complMun, uf: complUf } = parseMunicipioUf(compl);
+  const cepDig = (cep || "").replace(/\D/g, "");
   const temNome = (nome || "").trim().length >= 4;
+  const temCep = cepDig.length === 8;
+  const temCidadeUf = !!(complMun && complUf);
+  const podeBuscar = temNome || temCep || temCidadeUf;
+  const chaveBusca = `${nome || ""}|${logradouro || ""}|${cep || ""}|${compl || ""}`;
 
   const buscar = async () => {
     const razao = (nome || "").trim();
-    const { municipio, uf } = parseMunicipioUf(compl);
-    const cepDig = (cep || "").replace(/\D/g, "");
-
-    if (razao.length < 4) { setStatus("idle"); setCandidatos([]); return; }
+    if (!podeBuscar) { setStatus("idle"); setCandidatos([]); return; }
     setStatus("loading"); setCandidatos([]); setAmbiguo(false); setErro(""); setExpandido(false);
     try {
       const res = await base44.functions.invoke("localizarCnpj", {
         razao_social: razao,
         endereco: logradouro || "",
-        municipio: municipio || "",
-        uf: uf || "",
+        municipio: complMun || "",
+        uf: complUf || "",
         cep: cep || ""
       });
       const data = res.data || res;
@@ -63,15 +65,15 @@ export default function CnpjSugestao({ prefixo, nome, logradouro, cep, compl }) 
   };
 
   useEffect(() => {
-    if (!temNome) { setStatus("idle"); setCandidatos([]); return; }
+    if (!podeBuscar) { setStatus("idle"); setCandidatos([]); return; }
     if (chaveBusca === ultimaChave.current) return;
     clearTimeout(timer.current);
     timer.current = setTimeout(() => { ultimaChave.current = chaveBusca; buscar(); }, 900);
     return () => clearTimeout(timer.current);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chaveBusca, temNome]);
+  }, [chaveBusca, podeBuscar]);
 
-  if (!temNome || fechado || (status !== "loading" && status !== "success")) return null;
+  if (!podeBuscar || fechado || (status !== "loading" && status !== "success")) return null;
 
   return (
     <div className="rounded-2xl border border-blue-200 bg-blue-50/60 p-4">
@@ -80,7 +82,7 @@ export default function CnpjSugestao({ prefixo, nome, logradouro, cep, compl }) 
           <Search className="mt-0.5 h-4 w-4 shrink-0 text-blue-600" />
           <div>
             <span className="block text-xs font-bold uppercase tracking-wide text-blue-700">{ROTULO_RECLAMADA[prefixo] || "Reclamada"}</span>
-            <span className="text-sm font-bold text-slate-800">Dados encontrados com a razão social</span>
+            <span className="text-sm font-bold text-slate-800">{temNome ? "Dados encontrados com a razão social" : "Empresas neste endereço"}</span>
           </div>
         </div>
         <button type="button" onClick={() => setFechado(true)} className="text-slate-400 hover:text-slate-700"><X className="h-4 w-4" /></button>

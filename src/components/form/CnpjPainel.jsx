@@ -9,7 +9,9 @@ export default function CnpjPainel({ data }) {
     { prefixo: "RECL2", nome: data.RECL2_NOME, logradouro: data.RECL2_LOGRADOURO, cep: data.RECL2_CEP, compl: data.RECL2_ENDCOMPL },
     { prefixo: "RECL3", nome: data.RECL3_NOME, logradouro: data.RECL3_LOGRADOURO, cep: data.RECL3_CEP, compl: data.RECL3_ENDCOMPL },
     { prefixo: "RECL4", nome: data.RECL4_NOME, logradouro: data.RECL4_LOGRADOURO, cep: data.RECL4_CEP, compl: data.RECL4_ENDCOMPL },
-  ].filter(r => (r.nome || "").trim().length >= 4);
+  ].filter(r => (r.nome || "").trim().length >= 4
+    || (r.cep || "").replace(/\D/g, "").length === 8
+    || (r.compl || "").includes("/"));
 
   if (reclamadas.length === 0) return null;
 

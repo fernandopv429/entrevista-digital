@@ -87,21 +87,9 @@ function matrizFilialTexto(mf) {
   return mf.descricao || mf.tipo || "—";
 }
 
-async function consultar(termo, municipio, uf, cep) {
-  const body = {
-    busca_textual: [{
-      texto: [termo],
-      tipo_busca: "exata",
-      razao_social: true,
-      nome_fantasia: true
-    }],
-    situacao_cadastral: ["ATIVA"],
-    limite: 20
-  };
-  if (municipio) body.municipio = [municipio];
-  if (uf) body.uf = [uf];
-  if (cep) body.cep = [cep];
-
+async function executarPesquisa(body) {
+  body.situacao_cadastral = ["ATIVA"];
+  if (!body.limite) body.limite = 20;
   const res = await fetch("https://api.casadosdados.com.br/v5/cnpj/pesquisa?tipo_resultado=completo", {
     method: "POST",
     headers: {
@@ -125,6 +113,47 @@ async function consultar(termo, municipio, uf, cep) {
   return { erro: false, json };
 }
 
+// Busca por razão social / nome fantasia (texto), usando endereço como filtro.
+function corpoTextual(termo, municipio, uf, cep) {
+  const body = {
+    busca_textual: [{
+      texto: [termo],
+      tipo_busca: "exata",
+      razao_social: true,
+      nome_fantasia: true
+    }]
+  };
+  if (municipio) body.municipio = [municipio];
+  if (uf) body.uf = [uf];
+  if (cep) body.cep = [cep];
+  return body;
+}
+
+// Busca somente por endereço (CEP, município/UF, bairro, número), sem texto.
+// Não há busca textual por logradouro na API, então usamos os filtros de campo.
+function corpoEndereco(municipio, uf, cep, numero) {
+  const body = {};
+  if (cep) body.cep = [cep];
+  if (municipio) body.municipio = [municipio];
+  if (uf) body.uf = [uf];
+  if (numero) body.endereco_numero = [numero];
+  return body;
+}
+
+function extrairNumero(logradouro) {
+  if (!logradouro) return null;
+  const m = String(logradouro).match(/(\d+[A-Za-z]?)\s*$/);
+  return m ? m[1] : null;
+}
+
+function consultar(termo, municipio, uf, cep) {
+  return executarPesquisa(corpoTextual(termo, municipio, uf, cep));
+}
+
+function consultarPorEndereco(municipio, uf, cep, numero) {
+  return executarPesquisa(corpoEndereco(municipio, uf, cep, numero));
+}
+
 export default async function(req) {
   try {
     const base44 = createClientFromRequest(req);
@@ -138,18 +167,30 @@ export default async function(req) {
     const uf = normalizarTexto(payload.uf).substring(0, 2);
     const cep = normalizarCep(payload.cep);
 
-    if (!razao) return Response.json({ status: "error", mensagem: "razao_social é obrigatório" }, { status: 400 });
-
-    const termo = termoBusca(razao);
-    if (!termo) return Response.json({ status: "empty", total: 0, candidatos: [], ambiguo: false });
+    const numero = extrairNumero(endereco);
 
     let json = null;
     let erroInfo = null;
-    for (let tentativa = 1; tentativa <= 3; tentativa++) {
-      const r = await consultar(termo, municipio, uf, cep);
-      if (r.erro) { erroInfo = r; break; }
-      if (r.json.total > 0 || tentativa === 3) { json = r.json; break; }
-      await new Promise(resolve => setTimeout(resolve, 1500));
+
+    if (razao) {
+      const termo = termoBusca(razao);
+      if (!termo) return Response.json({ status: "empty", total: 0, candidatos: [], ambiguo: false });
+      for (let tentativa = 1; tentativa <= 3; tentativa++) {
+        const r = await consultar(termo, municipio, uf, cep);
+        if (r.erro) { erroInfo = r; break; }
+        if (r.json.total > 0 || tentativa === 3) { json = r.json; break; }
+        await new Promise(resolve => setTimeout(resolve, 1500));
+      }
+    } else if (cep || (municipio && uf)) {
+      // Busca por endereço quando não há razão social.
+      for (let tentativa = 1; tentativa <= 3; tentativa++) {
+        const r = await consultarPorEndereco(municipio, uf, cep, numero);
+        if (r.erro) { erroInfo = r; break; }
+        if (r.json.total > 0 || tentativa === 3) { json = r.json; break; }
+        await new Promise(resolve => setTimeout(resolve, 1500));
+      }
+    } else {
+      return Response.json({ status: "error", mensagem: "Informe a razão social ou o endereço (CEP ou cidade/UF)." }, { status: 400 });
     }
 
     if (erroInfo) {
