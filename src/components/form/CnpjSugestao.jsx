@@ -73,7 +73,7 @@ export default function CnpjSugestao({ prefixo, nome, logradouro, cep, compl }) 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chaveBusca, podeBuscar]);
 
-  if (!podeBuscar || fechado || status === "idle") return null;
+  if (!podeBuscar || fechado) return null;
 
   return (
     <div className="rounded-2xl border border-blue-200 bg-blue-50/60 p-4">
@@ -88,7 +88,9 @@ export default function CnpjSugestao({ prefixo, nome, logradouro, cep, compl }) 
         <button type="button" onClick={() => setFechado(true)} className="text-slate-400 hover:text-slate-700"><X className="h-4 w-4" /></button>
       </div>
 
-      {status === "idle" && null}
+      {status === "idle" && (
+        <div className="flex items-center gap-2 text-sm text-slate-500"><Loader2 className="h-4 w-4 animate-spin" /> Preparando busca...</div>
+      )}
 
       {status === "falta" && (
         <p className="text-sm leading-relaxed text-slate-700">
