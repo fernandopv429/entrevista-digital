@@ -52,7 +52,8 @@ export default function CnpjSugestao({ prefixo, nome, logradouro, cep, compl }) 
         uf: complUf || "",
         cep: cep || ""
       });
-      const data = res.data || res;
+      let data = res.data || res;
+      if (typeof data?.json === "function") data = await data.json();
       if (data.status === "error") {
         setStatus("error"); setErro(data.mensagem || "Falha na consulta"); return;
       }
