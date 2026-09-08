@@ -73,7 +73,7 @@ export default function CnpjSugestao({ prefixo, nome, logradouro, cep, compl }) 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chaveBusca, podeBuscar]);
 
-  if (!podeBuscar || fechado || (status !== "loading" && status !== "success")) return null;
+  if (!podeBuscar || fechado || status === "idle") return null;
 
   return (
     <div className="rounded-2xl border border-blue-200 bg-blue-50/60 p-4">
