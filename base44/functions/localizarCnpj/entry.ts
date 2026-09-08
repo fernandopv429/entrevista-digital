@@ -1,4 +1,3 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.44';
 import { secrets } from 'base44:runtime';
 
 const SUFIXOS = ["SOCIEDADE SIMPLES", "LIMITADA", "LTDA", "EIRELI", "EPP", "MEI", "ME", "SS", "SA"];
@@ -156,10 +155,6 @@ function consultarPorEndereco(municipio, uf, cep, numero) {
 
 export default async function(req) {
   try {
-    const base44 = createClientFromRequest(req);
-    const user = await base44.auth.me();
-    if (!user) return Response.json({ status: "error", mensagem: "Não autorizado" }, { status: 401 });
-
     const payload = await req.json();
     const razao = (payload.razao_social || "").trim();
     const endereco = payload.endereco || "";
