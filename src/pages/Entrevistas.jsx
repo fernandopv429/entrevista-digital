@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { FileText, Loader2, Building2, CalendarDays, Send, CheckCircle2, AlertCircle, Download, Pencil, Trash2, Search } from "lucide-react";
+import { FileText, Loader2, Building2, CalendarDays, Send, CheckCircle2, AlertCircle, Download, Pencil, Trash2, Search, Clock, XCircle } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { TIPO_DISPENSA_OPTIONS } from "@/lib/interviewOptions";
 import { generateInterviewPdf } from "@/lib/interviewPdf";
@@ -124,8 +124,20 @@ export default function Entrevistas() {
             </div>
             <div className="flex flex-col items-end gap-1.5">
               <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600"><CalendarDays className="h-3.5 w-3.5" />{formatDate(item.created_date)}</span>
+              {item.aprovacao_status === "aprovado" && <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700"><CheckCircle2 className="h-3.5 w-3.5" />Aprovado</span>}
+              {item.aprovacao_status === "reprovado" && <span className="inline-flex items-center gap-1.5 rounded-full bg-rose-100 px-3 py-1 text-xs font-semibold text-rose-700"><XCircle className="h-3.5 w-3.5" />Reprovado</span>}
+              {(!item.aprovacao_status || item.aprovacao_status === "pendente") && <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700"><Clock className="h-3.5 w-3.5" />Pendente</span>}
             </div>
           </div>
+          {item.aprovacao_status === "reprovado" && item.aprovacao_motivo && (
+            <div className="mt-3 flex items-start gap-2 rounded-xl border border-rose-200 bg-rose-50 p-3 text-sm text-rose-800">
+              <XCircle className="mt-0.5 h-4 w-4 shrink-0" />
+              <div>
+                <p className="font-bold">Motivo da reprovação</p>
+                <p className="mt-0.5">{item.aprovacao_motivo}</p>
+              </div>
+            </div>
+          )}
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             <div className="text-sm"><span className="font-semibold text-slate-700">Nascimento: </span><span className="text-slate-600">{formatDate(item.RECL_NASC)}</span></div>
             <div className="text-sm"><span className="font-semibold text-slate-700">Dispensa: </span><span className="text-slate-600">{dispensaLabel(item.tipo_dispensa)}</span></div>

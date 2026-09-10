@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { Loader2, ArrowLeft } from "lucide-react";
+import { Loader2, ArrowLeft, CheckCircle2, XCircle } from "lucide-react";
 import { Image } from "@/components/ui/image";
 import { base44 } from "@/api/base44Client";
 import EntrevistaForm from "@/components/form/EntrevistaForm";
@@ -42,6 +42,25 @@ export default function EditarEntrevista() {
         <p className="mt-3 max-w-2xl text-slate-600">Ajuste os dados do atendimento. Ao salvar, a entrevista é atualizada e o evento é reenviado automaticamente.</p>
       </div>
     </header>
+    {initial.aprovacao_status === "reprovado" && (
+      <div className="mx-auto mt-4 max-w-4xl px-4 sm:px-6">
+        <div className="flex items-start gap-3 rounded-2xl border border-rose-200 bg-rose-50 p-4">
+          <XCircle className="mt-0.5 h-5 w-5 shrink-0 text-rose-600" />
+          <div>
+            <p className="font-bold text-rose-800">Entrevista reprovada</p>
+            <p className="mt-1 text-sm text-rose-700">{initial.aprovacao_motivo || "Motivo não informado."}</p>
+          </div>
+        </div>
+      </div>
+    )}
+    {initial.aprovacao_status === "aprovado" && (
+      <div className="mx-auto mt-4 max-w-4xl px-4 sm:px-6">
+        <div className="flex items-center gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
+          <CheckCircle2 className="h-5 w-5 shrink-0 text-emerald-600" />
+          <p className="font-bold text-emerald-800">Entrevista aprovada</p>
+        </div>
+      </div>
+    )}
     <EntrevistaForm initialData={initial} onSubmit={handleSubmit} submitLabel="Salvar e reenviar" savedLabel="Entrevista atualizada e evento reenviado com sucesso." />
   </main>;
 }
