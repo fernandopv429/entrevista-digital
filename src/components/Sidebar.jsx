@@ -1,11 +1,12 @@
 import React from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import { Home, FileText, FlaskConical, LogOut } from "lucide-react";
+import { Home, FileText, FlaskConical, LogOut, BookOpen } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
 const items = [
   { to: "/", icon: Home, label: "Nova entrevista" },
   { to: "/entrevistas", icon: FileText, label: "Entrevistas salvas" },
+  { to: "/documentacao", icon: BookOpen, label: "Documentação" },
 ];
 
 export default function Sidebar() {
