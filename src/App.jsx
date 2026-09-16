@@ -10,6 +10,7 @@ import Home from '@/pages/Home';
 import Entrevistas from '@/pages/Entrevistas';
 import EditarEntrevista from '@/pages/EditarEntrevista';
 import AppLayout from '@/components/AppLayout';
+import DocumentacaoForm from '@/pages/DocumentacaoForm';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -43,6 +44,7 @@ const AuthenticatedApp = () => {
       <Route path="/" element={<Home />} />
       <Route path="/entrevistas" element={<Entrevistas />} />
       <Route path="/entrevistas/:id/editar" element={<EditarEntrevista />} />
+      <Route path="/documentacao" element={<DocumentacaoForm />} />
     </Route>
     <Route path="*" element={<PageNotFound />} />
     </Routes>
