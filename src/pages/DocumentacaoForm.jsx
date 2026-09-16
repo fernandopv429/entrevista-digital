@@ -199,6 +199,143 @@ const SECTIONS = [
     ],
   },
   {
+    title: "APIs de integração — Endpoints externos",
+    isApiSection: true,
+    apis: [
+      {
+        nome: "1. Criar entrevista",
+        metodo: "POST",
+        url: "https://formulariofav.base44.app/functions/criarEntrevista",
+        auth: "Header: x-api-key: <APROVACAO_API_KEY>",
+        descricao: "Cria uma nova entrevista na base de dados. Sistema externo envia os dados do formulário e recebe o ID do registro criado.",
+        payload: `{
+  "RECL_NOME": "João da Silva",      // obrigatório
+  "RECL_CPF": "123.456.789-00",      // obrigatório
+  "RECL_NASC": "1990-01-15",
+  "SALARIO": "R$ 2.148,22",
+  "FUNCAO": "Vigilante",
+  "tipo_dispensa": "sem_justa_causa",
+  "DATA_ADMISSAO": "2023-01-02",
+  "DATA_RESCISAO": "2025-06-30",
+  ...todos os campos da entidade Entrevista
+}`,
+        resposta: `// 201 Created
+{ "status": "ok", "entrevista_id": "abc123", "data": { ...registro } }
+
+// 400 Bad Request
+{ "error": "RECL_NOME e RECL_CPF são obrigatórios" }
+
+// 401 Unauthorized
+{ "error": "Unauthorized — API key inválida" }`,
+        regras: [
+          "Apenas RECL_NOME e RECL_CPF são obrigatórios no payload.",
+          "Os campos devem seguir os tipos definidos na entidade (datas em ISO yyyy-mm-dd, SALARIOS_ABERTO_QTD como número).",
+          "A chave APROVACAO_API_KEY é a mesma usada no endpoint de aprovação.",
+        ],
+      },
+      {
+        nome: "2. Aprovar / Reprovar entrevista",
+        metodo: "POST",
+        url: "https://formulariofav.base44.app/functions/atualizarAprovacaoEntrevista",
+        auth: "Header: x-api-key: <APROVACAO_API_KEY>",
+        descricao: "Atualiza o status de aprovação de uma entrevista. Define se a entrevista foi aprovada ou reprovada pelo sistema externo.",
+        payload: `{
+  "entrevista_id": "abc123",       // obrigatório
+  "status": "aprovado",            // "aprovado" ou "reprovado"
+  "motivo": "Falta de documentos"  // obrigatório apenas se status = "reprovado"
+}`,
+        resposta: `// 200 OK
+{ "status": "ok", "entrevista_id": "abc123", "aprovacao_status": "aprovado" }
+
+// 400 Bad Request
+{ "error": "motivo é obrigatório quando status = reprovado" }
+
+// 401 Unauthorized
+{ "error": "Unauthorized — API key inválida" }`,
+        regras: [
+          "status deve ser exatamente 'aprovado' ou 'reprovado'.",
+          "Quando status = 'reprovado', o campo 'motivo' é obrigatório e é salvo em aprovacao_motivo.",
+          "Quando status = 'aprovado', o campo aprovacao_motivo é limpo (vazio).",
+          "A API key pode ser enviada no header (x-api-key) ou na query string (?api_key=).",
+        ],
+      },
+      {
+        nome: "3. Consultar CNPJ / Razão Social (interno)",
+        metodo: "POST",
+        url: "https://formulariofav.base44.app/functions/localizarCnpj",
+        auth: "Sem autenticação — chamado pelo frontend via SDK (base44.functions.invoke)",
+        descricao: "Consulta a base da Casa dos Dados para encontrar CNPJs por razão social ou endereço. Retorna candidatos ranqueados por similaridade. Usado pelo painel lateral do formulário para pré-preencher dados das reclamadas.",
+        payload: `{
+  "razao_social": "GEAR SEGURANCA",  // opcional (mín. 4 caracteres)
+  "endereco": "Rua das Flores, 123", // opcional
+  "municipio": "São Paulo",           // opcional
+  "uf": "SP",                         // opcional
+  "cep": "01000-000"                  // opcional
+}`,
+        resposta: `// Sucesso
+{
+  "status": "success",
+  "total": 3,
+  "ambiguo": false,
+  "candidatos": [{
+    "cnpj": "12345678000190",
+    "cnpj_formatado": "12.345.678/0001-90",
+    "razao_social": "GEAR SEGURANCA PRIVADA LTDA",
+    "nome_fantasia": "GEAR",
+    "matriz_filial": "Matriz",
+    "situacao": "ATIVO",
+    "cnae_principal": { "codigo": "8011-1/01", "descricao": "..." },
+    "cnaes_secundarios": [...],
+    "endereco_completo": "Rua das Flores, 123 - São Paulo/SP",
+    "score_endereco": 0.92
+  }]
+}
+
+// Vazio
+{ "status": "empty", "total": 0, "candidatos": [], "ambiguo": false }
+
+// Erro
+{ "status": "error", "mensagem": "Falha ao consultar API externa" }`,
+        regras: [
+          "Busca por razão social OU por endereço (CEP + cidade/UF). Pelo menos um critério é necessário.",
+          "Sistema faz até 3 tentativas com retry de 1.5s entre cada.",
+          "Candidatos são ordenados: razão social idêntica primeiro, depois por score de similaridade de endereço.",
+          "ambiguo = true quando 2+ candidatos têm score_endereco > 0.85 (mais de uma empresa compatível).",
+          "Resultados são informativos — o preenchimento dos campos da reclamada é manual pelo consultor.",
+        ],
+      },
+      {
+        nome: "4. Webhook — Entrevista salva (saída)",
+        metodo: "POST",
+        url: "Configurado nos secrets WEBHOOK_URL e WEBHOOK_URL_2",
+        auth: "Header: X-Webhook-Secret: <WEBHOOK_SECRET> (se configurado)",
+        descricao: "Disparado automaticamente quando uma entrevista é salva ou reenviada. Envia o payload completo da entrevista para os webhooks configurados (até 2 destinos). O sistema externo (n8n) consome estes dados para gerar a peça jurídica.",
+        payload: `{
+  "event": "entrevista.salva",
+  "id": "abc123",
+  "created_by": "usuario@email.com",  // ou "anonimo" se sem login
+  "timestamp": "2026-09-16T11:24:00-03:00",  // horário de Brasília
+  "data": {
+    ...todos os campos da entidade Entrevista,
+    "aprovacao_status": "pendente",
+    "fatos_narrados": "Relato + frase EM VIGOR (se contrato ativo)"
+  }
+}`,
+        resposta: `// O webhook não retorna resposta para o cliente — é fire-and-forget.
+// Falha no webhook NÃO impede o salvamento da entrevista.
+// O sistema tenta 2 destinos em paralelo (WEBHOOK_URL e WEBHOOK_URL_2).`,
+        regras: [
+          "Disparado após cada salvamento ou reenvio de entrevista (EditarEntrevista).",
+          "timestamp sempre em horário de Brasília (America/Sao_Paulo, UTC-3).",
+          "created_by = email do usuário logado ou 'anonimo' (formulário público).",
+          "Se o contrato está em vigor, o campo fatos_narrados recebe a frase 'Contrato de trabalho EM VIGOR...' automaticamente antes do envio.",
+          "Falha no webhook não bloqueia o salvamento — o erro é capturado silenciosamente.",
+          "O segundo webhook (WEBHOOK_URL_2) usa WEBHOOK_SECRET_2 se definido, senão cai para WEBHOOK_SECRET.",
+        ],
+      },
+    ],
+  },
+  {
     title: "Campos do sistema (não editáveis no formulário)",
     fields: [
       ["aprovacao_status", "Status de aprovação", "enum", "—", "Status de aprovação da entrevista. Inicia como 'pendente'. Atualizado via API externa para 'aprovado' ou 'reprovado'.", "pendente, aprovado, reprovado"],
@@ -308,45 +445,96 @@ export default function DocumentacaoForm() {
         </div>
 
         <div className="space-y-8">
-          {SECTIONS.map((section, si) => (
-            <section key={si}>
-              <h2 className="mb-3 text-lg font-bold text-slate-900">{section.title}</h2>
-              <div className="overflow-x-auto">
-                <table className="w-full border-collapse text-xs">
-                  <thead>
-                    <tr className="bg-slate-100 text-left">
-                      <th className="border border-slate-200 px-2 py-2 font-bold text-slate-700">Campo (key)</th>
-                      <th className="border border-slate-200 px-2 py-2 font-bold text-slate-700">Rótulo</th>
-                      <th className="border border-slate-200 px-2 py-2 font-bold text-slate-700">Tipo</th>
-                      <th className="border border-slate-200 px-2 py-2 font-bold text-slate-700">Obrig.</th>
-                      <th className="border border-slate-200 px-2 py-2 font-bold text-slate-700">Instruções de preenchimento e destino na peça</th>
-                      <th className="border border-slate-200 px-2 py-2 font-bold text-slate-700">Opções / Exemplos</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {section.fields.map((f, fi) => (
-                      <tr key={fi} className={fi % 2 === 0 ? "bg-white" : "bg-slate-50/50"}>
-                        <td className="border border-slate-200 px-2 py-2 align-top font-mono text-[10px] text-brand">{f[0]}</td>
-                        <td className="border border-slate-200 px-2 py-2 align-top font-medium text-slate-800">{f[1]}</td>
-                        <td className="border border-slate-200 px-2 py-2 align-top text-slate-600">{f[2]}</td>
-                        <td className="border border-slate-200 px-2 py-2 text-center align-top">
-                          {f[3] === "sim" ? (
-                            <span className="font-bold text-brand">Sim</span>
-                          ) : f[3] === "não" ? (
-                            <span className="text-slate-400">Não</span>
-                          ) : (
-                            <span className="text-slate-400">—</span>
-                          )}
-                        </td>
-                        <td className="border border-slate-200 px-2 py-2 align-top leading-relaxed text-slate-700">{f[4]}</td>
-                        <td className="border border-slate-200 px-2 py-2 align-top text-[10px] text-slate-500">{f[5]}</td>
+          {SECTIONS.map((section, si) =>
+            section.isApiSection ? (
+              <section key={si}>
+                <h2 className="mb-3 text-lg font-bold text-slate-900">{section.title}</h2>
+                <div className="space-y-4">
+                  {section.apis.map((api, ai) => (
+                    <div key={ai} className="rounded-xl border border-slate-200 bg-slate-50/50 p-4">
+                      <div className="mb-3 flex flex-wrap items-center gap-2">
+                        <span className="rounded-md bg-brand px-2 py-1 text-[10px] font-bold uppercase text-white">{api.metodo}</span>
+                        <h3 className="text-sm font-bold text-slate-900">{api.nome}</h3>
+                      </div>
+                      <dl className="space-y-2 text-xs">
+                        <div className="flex gap-2">
+                          <dt className="font-bold text-slate-500">URL:</dt>
+                          <dd className="font-mono text-[10px] break-all text-slate-700">{api.url}</dd>
+                        </div>
+                        <div className="flex gap-2">
+                          <dt className="font-bold text-slate-500">Auth:</dt>
+                          <dd className="font-mono text-[10px] text-slate-700">{api.auth}</dd>
+                        </div>
+                        <div>
+                          <dt className="mb-1 font-bold text-slate-500">Descrição:</dt>
+                          <dd className="leading-relaxed text-slate-700">{api.descricao}</dd>
+                        </div>
+                        <div>
+                          <dt className="mb-1 font-bold text-slate-500">Payload (request):</dt>
+                          <dd><pre className="overflow-x-auto rounded-lg bg-slate-900 p-3 text-[10px] leading-relaxed text-slate-100">{api.payload}</pre></dd>
+                        </div>
+                        <div>
+                          <dt className="mb-1 font-bold text-slate-500">Resposta (response):</dt>
+                          <dd><pre className="overflow-x-auto rounded-lg bg-slate-900 p-3 text-[10px] leading-relaxed text-slate-100">{api.resposta}</pre></dd>
+                        </div>
+                        <div>
+                          <dt className="mb-1 font-bold text-slate-500">Regras:</dt>
+                          <dd>
+                            <ul className="space-y-1">
+                              {api.regras.map((r, ri) => (
+                                <li key={ri} className="flex items-start gap-2 leading-relaxed text-slate-700">
+                                  <span className="mt-1 h-1 w-1 shrink-0 rounded-full bg-brand" />
+                                  {r}
+                                </li>
+                              ))}
+                            </ul>
+                          </dd>
+                        </div>
+                      </dl>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            ) : (
+              <section key={si}>
+                <h2 className="mb-3 text-lg font-bold text-slate-900">{section.title}</h2>
+                <div className="overflow-x-auto">
+                  <table className="w-full border-collapse text-xs">
+                    <thead>
+                      <tr className="bg-slate-100 text-left">
+                        <th className="border border-slate-200 px-2 py-2 font-bold text-slate-700">Campo (key)</th>
+                        <th className="border border-slate-200 px-2 py-2 font-bold text-slate-700">Rótulo</th>
+                        <th className="border border-slate-200 px-2 py-2 font-bold text-slate-700">Tipo</th>
+                        <th className="border border-slate-200 px-2 py-2 font-bold text-slate-700">Obrig.</th>
+                        <th className="border border-slate-200 px-2 py-2 font-bold text-slate-700">Instruções de preenchimento e destino na peça</th>
+                        <th className="border border-slate-200 px-2 py-2 font-bold text-slate-700">Opções / Exemplos</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </section>
-          ))}
+                    </thead>
+                    <tbody>
+                      {section.fields.map((f, fi) => (
+                        <tr key={fi} className={fi % 2 === 0 ? "bg-white" : "bg-slate-50/50"}>
+                          <td className="border border-slate-200 px-2 py-2 align-top font-mono text-[10px] text-brand">{f[0]}</td>
+                          <td className="border border-slate-200 px-2 py-2 align-top font-medium text-slate-800">{f[1]}</td>
+                          <td className="border border-slate-200 px-2 py-2 align-top text-slate-600">{f[2]}</td>
+                          <td className="border border-slate-200 px-2 py-2 text-center align-top">
+                            {f[3] === "sim" ? (
+                              <span className="font-bold text-brand">Sim</span>
+                            ) : f[3] === "não" ? (
+                              <span className="text-slate-400">Não</span>
+                            ) : (
+                              <span className="text-slate-400">—</span>
+                            )}
+                          </td>
+                          <td className="border border-slate-200 px-2 py-2 align-top leading-relaxed text-slate-700">{f[4]}</td>
+                          <td className="border border-slate-200 px-2 py-2 align-top text-[10px] text-slate-500">{f[5]}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </section>
+            )
+          )}
         </div>
       </div>
     </main>
