@@ -1,8 +1,9 @@
 import React, { useRef, useState } from "react";
-import { Download, Loader2, ArrowLeft, FileText } from "lucide-react";
+import { Download, Loader2, ArrowLeft, FileText, Server } from "lucide-react";
 import { Link } from "react-router-dom";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
+import { generateBackendGuidePdf } from "@/lib/backendGuidePdf";
 
 const SECTIONS = [
   {
@@ -403,6 +404,14 @@ export default function DocumentacaoForm() {
     }
   };
 
+  const baixarGuiaBackend = () => {
+    try {
+      generateBackendGuidePdf();
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   return (
     <main className="min-h-screen bg-app-bg pb-20 text-slate-950">
       <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/95 backdrop-blur">
@@ -410,14 +419,23 @@ export default function DocumentacaoForm() {
           <Link to="/" className="inline-flex items-center gap-2 text-sm font-semibold text-brand hover:underline">
             <ArrowLeft className="h-4 w-4" /> Voltar
           </Link>
-          <button
-            onClick={baixarPdf}
-            disabled={generating}
-            className="flex items-center gap-2 rounded-xl bg-brand px-5 py-2.5 font-bold text-white transition hover:brightness-95 disabled:opacity-60"
-          >
-            {generating ? <Loader2 className="h-5 w-5 animate-spin" /> : <Download className="h-5 w-5" />}
-            {generating ? "Gerando PDF..." : "Baixar PDF"}
-          </button>
+          <div className="flex items-center gap-2 sm:gap-3">
+            <button
+              onClick={baixarGuiaBackend}
+              className="flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2.5 font-bold text-slate-700 transition hover:bg-slate-50"
+            >
+              <Server className="h-5 w-5" />
+              <span className="hidden sm:inline">Guia de backend</span>
+            </button>
+            <button
+              onClick={baixarPdf}
+              disabled={generating}
+              className="flex items-center gap-2 rounded-xl bg-brand px-5 py-2.5 font-bold text-white transition hover:brightness-95 disabled:opacity-60"
+            >
+              {generating ? <Loader2 className="h-5 w-5 animate-spin" /> : <Download className="h-5 w-5" />}
+              {generating ? "Gerando PDF..." : "Baixar PDF"}
+            </button>
+          </div>
         </div>
       </header>
 
